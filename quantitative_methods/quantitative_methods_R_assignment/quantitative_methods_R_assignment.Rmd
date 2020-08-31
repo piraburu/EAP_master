@@ -1,0 +1,474 @@
+---
+title: 'QUANTITATIVE METHODS: R HOMEWORK ASSIGNMENT '
+author: "Pedro Iraburu Muñoz"
+date: "29/11/2019"
+output:
+  pdf_document: default
+  word_document: default
+  html_document: default
+header-includes: \usepackage{dcolumn}
+---
+
+
+# 1.0 INTRODUCTION
+
+This homework analyzes a database compound of variables that explains the customer's behavior in online shops (Kaggle, 2019). For this task, I will make a descriptive data analysis prior to a regression logit (and probit) model. I found the database in Kaggle, a webpage that provides a wide number of databases.  
+
+This database is provided by the master thesis of Mete Alpaslan Katircioglu, from Bahçeşehir University. It is made of 18 variables, eight of them are categorical and the rest are numerical. The information was collected during a year from 12,300 sessions (each one from a different individual).
+
+"Administrative", "Informational" and "Product related", describe the number of pages of different type each user searched, with their following time spent on each.
+
+"Bounce Rate", "Exit Rate" and "Page Value" represents distinct metric collected by "Google Analytics". The first one refers to the percentage of users that leave the page without visiting others from that website. On the contrary, "Exit Rate" measure the visitors who exit the website after visiting others pages from that same website.
+
+Finally, the "Page Value" variable, is defined by Google as:
+"Page Value is the average value for a page that a user visited before landing on the goal page or completing an Ecommerce transaction (or both)" (Google, 2019).
+
+The remaining variables are: "Special Day", that indicates the closeness of an important event like Valentine's Day; "Month", that measures the month the session took time in; "Operating System", "Browser" and "Weekend" are self-explanatory. "Traffic type" reports the type by which the visitor has arrived at the website (Katircioglu, 2018). Last, but not least, "Revenue" just tells us if a transaction has been conducted during the session.
+
+![Kaggle logo (source: https://www.kaggle.com/)](C:\Users\pimpeter\Desktop\homework.r\image.png){width=400px}
+
+\newpage
+# 2.0 Descriptive data analysis
+
+  ```{r ,message=FALSE ,echo=FALSE}
+library("stargazer")                  
+library("pastecs")
+library("ggplot2")
+library("doBy")
+library("lmtest")
+library("aod")
+library("margins")
+library("lmtest")
+data <- read.csv(file="data2.csv", header=TRUE, sep=",", dec=".")
+
+  ```
+
+First of all, I will check if there are any NAs and eliminate the rows that contains any:
+
+  ```{r}
+# Checking if there are nas, and how many: missing count
+sum(is.na(data))
+
+
+# eliminating rows with nas
+data <- data[complete.cases(data),]
+
+  ```
+Counting the number of current rows, and classifying each column by its type:
+
+  ```{r}
+# Checking if there are nas, and how many: missing count
+sum(is.na(data))
+
+# eliminating rows with nas
+data <- data[complete.cases(data),]
+
+
+# Class of each column
+sapply(data,class)
+
+# Classifying non-numeric variables 
+dummies <- c("Weekend", "Revenue")
+categ <- c("VisitorType", "Month", "TrafficType", "Region", "Browser","OperatingSystems")
+
+data.dummies <- data[,dummies]
+data.categ <- data[,categ]
+data.num <- data[,-c(10:18)] # selecting just the numeric variables
+
+  ```
+  
+\newpage
+Using "stargazer", a library for R, we get the following table that includes basic descriptive statistics for the numerical variables of the database:
+
+\begin{table}[!htbp] \centering 
+  \caption{} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lccccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+Statistic & \multicolumn{1}{c}{N} & \multicolumn{1}{c}{Mean} & \multicolumn{1}{c}{St. Dev.} & \multicolumn{1}{c}{Min} & \multicolumn{1}{c}{Pctl(25)} & \multicolumn{1}{c}{Pctl(75)} & \multicolumn{1}{c}{Max} \\ 
+\hline \\[-1.8ex] 
+Administrative & 12,316 & 2.318 & 3.323 & 0 & 0 & 4 & 27 \\ 
+Administrative\_Duration & 12,316 & 80.906 & 176.860 & $-$1 & 0 & 93.5 & 3,399 \\ 
+Informational & 12,316 & 0.504 & 1.271 & 0 & 0 & 0 & 24 \\ 
+Informational\_Duration & 12,316 & 34.506 & 140.825 & $-$1 & 0 & 0 & 2,549 \\ 
+ProductRelated & 12,316 & 31.764 & 44.490 & 0 & 7 & 38 & 705 \\ 
+ProductRelated\_Duration & 12,316 & 1,196.037 & 1,914.373 & $-$1 & 185 & 1,466.5 & 63,974 \\ 
+BounceRates & 12,316 & 0.022 & 0.048 & 0.000 & 0.000 & 0.017 & 0.200 \\ 
+ExitRates & 12,316 & 0.043 & 0.049 & 0.000 & 0.014 & 0.050 & 0.200 \\ 
+PageValues & 12,316 & 5.896 & 18.578 & 0 & 0 & 0 & 362 \\ 
+SpecialDay & 12,316 & 0.061 & 0.199 & 0 & 0 & 0 & 1 \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\end{table} 
+
+&nbsp;
+
+For the non numerical, I think a graphical approach is much better for visualizing the data, so I used histograms. As we can see the probability of not buying is much higher. I also could not find the names of the regions, so their categories are represented by numbers (as well as the traffic type)[^1]:
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+  ```{r fig.width=2.9, fig.height=2.9,echo=FALSE}
+# DUMMY VAR #1
+ggplot(data.frame(data.dummies$Weekend), aes(x=data.dummies$Weekend)) +
+  geom_bar(aes(y = (..count..)/sum(..count..)), color="black", fill="white") + ggtitle("Fig.2:  Weekend Distribution") +xlab("Weekend") + ylab("Percentage") + theme(plot.title = element_text(size=10))
+
+# DUMMY VAR #2
+ggplot(data.frame(data.dummies$Revenue), aes(x=data.dummies$Revenue)) +
+  geom_bar(aes(y = (..count..)/sum(..count..)), color="black", fill="white") + ggtitle("Fig.3:  Revenue Distribution") + xlab("Revenue") + ylab("Percentage") + theme(plot.title = element_text(size=10))
+```
+
+&nbsp;
+
+&nbsp;
+
+
+[^1]: I searched in his Master Thesis pdf file, but could not find it. 
+
+  ```{r fig.width=2.9, fig.height=2.9,echo=FALSE}
+# CATEG VAR #1
+ggplot(data.frame(data.categ$VisitorType), aes(x=data.categ$VisitorType)) +
+  geom_bar(aes(y = (..count..)/sum(..count..)), color="black", fill="white") + ggtitle("Fig.4:  Visitor Type Distribution") + xlab("Visitor Type") + ylab("Percentage") + theme(plot.title = element_text(size=10))
+
+# CATEG VAR #2
+ggplot(data.frame(data.categ$Month), aes(x=data.categ$Month)) +
+  geom_bar(aes(y = (..count..)/sum(..count..)), color="black", fill="white") + ggtitle("Fig.5:  Months Distribution") + xlab("Months") + ylab("Percentage") + theme(plot.title = element_text(size=10))
+  ```
+
+
+
+  ```{r fig.width=2.9, fig.height=2.9,echo=FALSE} 
+# CATEG VAR #3
+ggplot(data.frame(data.categ$TrafficType), aes(x=data.categ$TrafficType)) +
+  geom_bar(aes(y = (..count..)/sum(..count..)), color="black", fill="white") + ggtitle("Fig.6:  Traffic Type Distribution") + xlab("Traffic Type") + ylab("Percentage") + theme(plot.title = element_text(size=10))
+
+# CATEG VAR #4
+ggplot(data.frame(data.categ$Region), aes(x=data.categ$Region)) +
+  geom_bar(aes(y = (..count..)/sum(..count..)), color="black", fill="white") + ggtitle("Fig.7:  Region Distribution") + xlab("Region") + ylab("Percentage") + theme(plot.title = element_text(size=10))
+
+  ```
+  
+  
+  ```{r fig.width=2.9, fig.height=2.9,echo=FALSE}  
+# CATEG VAR #5
+ggplot(data.frame(data.categ$Browser), aes(x=data.categ$Browser)) +
+  geom_bar(aes(y = (..count..)/sum(..count..)), color="black", fill="white") + ggtitle("Fig.8:  Browser Distribution") + xlab("Browser") + ylab("Percentage") + theme(plot.title = element_text(size=10))
+
+# CATEG VAR #6
+ggplot(data.frame(data.categ$OperatingSystems), aes(x=data.categ$OperatingSystems)) +
+  geom_bar(aes(y = (..count..)/sum(..count..)), color="black", fill="white") + ggtitle("Fig.9:  Operating Systems Distribution ") + xlab("Operating Systems") + ylab("Percentage") + theme(plot.title = element_text(size=10))
+  
+  ```
+  
+  
+We can use R to check how many purchases each month had in the almost $13,000$ sessions, and observe that November and May gather more than half of the total:
+
+
+  ```{r}
+summaryBy(Revenue ~ Month, FUN=sum, data=data)
+
+  ```
+
+\newpage
+# 3.0 Regression
+ Prior to making the model, I will "clean" the database to make it more suited to the logit/probit regression. For this purpose, I convert the "Visitor_type" variable into a dummy variable "visitor" which takes value $0$ if the user is a returning one, and $0$ otherwise. Also, after regressing the first model (you can check it in the .R file, I did not want to include many different models in this file), I just took the months that were relevant, and made two new variables: "relev_months_neg", which includes the months that had significant negative effects on the probability of the page getting a purchase; and "relev_months_pos", which incorporates the ones that had a positive effect.
+
+  ```{r}
+# Assigning numerical values to the "Visitor" variable (from categorical to dummy)
+data$visitor <- as.numeric(data$VisitorType=="Returning_Visitor")
+
+# Not all months are relevant, we make a variable for those which are:
+# Dec, feb, mar, may, nov
+
+data$relev_months_neg <- as.numeric(data$Month=="Dec"|data$Month=="Feb"
+                                |data$Month=="Mar"|data$Month=="May")
+data$relev_months_pos <- as.numeric(data$Month=="Nov")
+
+
+  ```
+## 3.1 Model
+
+After a few more different models (again, in the .R file) I end up with this model:
+
+\begin{equation} \label{eq1}
+P(Y=1|x_{1},..., x_{5}) = \frac{exp(\beta_{0}+\beta_{1}x_{1}+\beta_{2}x_{2}+\beta_{3}x_{3}+\beta_{4}x_{4}+\beta_{5}x_{5})}{1+exp(\beta_{0}+\beta_{1}x_{1}+\beta_{2}x_{2}+\beta_{3}x_{3}+\beta_{4}x_{4}+\beta_{5}x_{5})}
+\end{equation}
+
+Where $P(Y=1/x_{1},..., x_{5})$ is the probability of a page getting revenue, given the $\beta s$ and the vector of $x$. The variables in this final model are: "Informational Duration", "Exit Rates", "Page Values" and "Relevant Months", both positive and negative. The "visitors" variable appeared to not be relevant at a $\alpha= 0.05$ significance level. The $\beta s$ are estimated using ML, and in R this is done as it follows:
+
+
+  ```{r message=FALSE }
+# Logit model
+logit <- glm(Revenue ~ Informational_Duration +  ExitRates + 
+PageValues + relev_months_pos + relev_months_neg, 
+data = data, family = "binomial"(link = "logit"))  
+summary(logit)
+
+# Probit model
+probit <- glm(Revenue ~ Informational_Duration +  ExitRates 
++ PageValues + relev_months_pos + relev_months_neg, 
+data = data, family = binomial(link = "probit"))
+summary(probit)
+
+  ```
+I also included a probit model, even though I will only analyze the logit one. As we can see, although there are differences between the coefficients of both models (probit assumes a normal distribution, and logit a logarithmic one), the final probability given by the models should be very similar. About the coefficients, we can interpret its sign (we cannot give an interpretation of its values because of the non-linear  relationship between the value and the outcome probability).
+
+&nbsp;
+
+&nbsp;
+
+
+\begin{table}[!htbp] \centering 
+  \caption{Results} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lD{.}{.}{-3} D{.}{.}{-3} } 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{2}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-3} 
+\\[-1.8ex] & \multicolumn{2}{c}{Revenue} \\ 
+\\[-1.8ex] & \multicolumn{1}{c}{\textit{logistic}} & \multicolumn{1}{c}{\textit{probit}} \\ 
+\\[-1.8ex] & \multicolumn{1}{c}{(1)} & \multicolumn{1}{c}{(2)}\\ 
+\hline \\[-1.8ex] 
+ Informational\_Duration & 0.001^{***} & 0.0004^{***} \\ 
+  & (0.0002) & (0.0001) \\ 
+  & & \\ 
+ ExitRates & -21.080^{***} & -10.516^{***} \\ 
+  & (1.637) & (0.791) \\ 
+  & & \\ 
+ PageValues & 0.082^{***} & 0.039^{***} \\ 
+  & (0.002) & (0.001) \\ 
+  & & \\ 
+ relev\_months\_pos & 0.614^{***} & 0.319^{***} \\ 
+  & (0.085) & (0.046) \\ 
+  & & \\ 
+ relev\_months\_neg & -0.592^{***} & -0.331^{***} \\ 
+  & (0.084) & (0.044) \\ 
+  & & \\ 
+ Constant & -1.688^{***} & -0.986^{***} \\ 
+  & (0.083) & (0.043) \\ 
+  & & \\ 
+\hline \\[-1.8ex] 
+Observations & \multicolumn{1}{c}{12,316} & \multicolumn{1}{c}{12,316} \\ 
+Log Likelihood & \multicolumn{1}{c}{-3,617.511} & \multicolumn{1}{c}{-3,692.848} \\ 
+Akaike Inf. Crit. & \multicolumn{1}{c}{7,247.021} & \multicolumn{1}{c}{7,397.696} \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{2}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
+
+
+\newpage
+## 3.2 Interpretation of the model
+For the interpretation of the model I will use a table that showcases the changes in probability when a variable shifts to another value, and the partial changes in probability: also called the marginal effects[^2].
+
+### Marginal effects
+Using R, I compute the marginal effects at the mean of the independent variables.
+These values tell us how much does the probability of purchase changes if the independent variable increases one unit. For example, if "PageValues" increases one unit, the probability will grow in $0.6996 \%$.
+
+&nbsp;
+
+&nbsp;
+
+\begin{table}[h!]
+\caption{}
+\label{} 
+\centering
+\begin{tabular}{ll}
+\hline
+\textbf{Variable} & \textbf{Marginal Effect} \\ \hline
+Informational\_Duration & 0.000053        \\ \hline
+ExitRates               & -1.808000       \\ \hline
+PageValues              & 0.006996        \\ \hline
+relev\_months\_pos      & 0.052680        \\ \hline
+relev\_months\_neg      & -0.050760       \\ \hline
+\end{tabular}
+\end{table}
+
+### Discrete change in probability
+
+These are different from the marginal effects. They can be interpreted as: 
+"[...] for a change in the variable $x_k$ from $x_k$ to $x_k + \delta$, the predicted probability of an event changes by $\bigtriangleup P r(y = 1|x)/ \bigtriangleup x_k$ holding all other variables constant." (Mariel, 2019). The benchmark I used takes the median values of the numerical variables, and $0$ for the dummies. Computing in R we get the following changes in probabilities:
+
+&nbsp;
+
+&nbsp;
+
+
+\begin{table}[h!]
+\caption{}
+\label{} 
+\centering
+\begin{tabular}{ll}
+\hline
+\textbf{Variable} & \textbf{Discrete change in probability} \\ \hline
+Informational\_Duration & 0.007985                       \\ \hline
+ExitRates               & -0.060507                      \\ \hline
+PageValues              & 0.233081                       \\ \hline
+relev\_months\_pos      & 0.069304                       \\ \hline
+relev\_months\_neg      & 0.041357                       \\ \hline
+\end{tabular}
+\end{table}
+
+
+[^2]: You can find the code used to get these results in the $.R$ file.
+
+\newpage
+## 3.3 Tests
+I also conducted a few tests, like the Wald test for the Operating systems variable:
+
+
+  ```{r}
+# Wald test for Operating systems 
+logit.w <- glm(Revenue ~ Informational_Duration +  ExitRates + PageValues
+               +OperatingSystems+relev_months_pos+relev_months_neg, 
+               data = data, family = "binomial"(link = "logit"))  
+wald.test(b=coef(logit.w), Sigma=vcov(logit.w), Terms = 5)
+
+  ```
+As we can see, the variable is non relevant at $\alpha=0.05$ significance level.
+I will now check the same null hypothesis using now the LR test:
+
+  ```{r}
+# We can test the same H_0 by LR test #
+
+# Full model #
+NR <- glm(Revenue ~ Informational_Duration+  ExitRates+PageValues+OperatingSystems+relev_months_pos+relev_months_neg,
+data = data, family = "binomial"(link = "logit"))  
+
+# Restricted model #
+R <-  glm(Revenue ~ Informational_Duration+  ExitRates+PageValues+relev_months_pos+relev_months_neg, 
+data = data, family = "binomial"(link = "logit"))  
+
+# LR test #
+library(lmtest)
+lrtest.default(NR,R)
+  ```
+As we can observe, the same conclusion holds. Lastly, I will check if there is multicollinearity within the independent variables, using a vif function I made myself. As the output shows, there are no hints of multicollinearity.
+
+
+  ```{r}
+vif <-function(regression){
+  n1=length(regression$coefficients)-1    
+  n2=length(regression$residuals)         
+  n3=length(regression$coefficients)-2      
+  output<-matrix(,n2,n1)                                  
+  r<-matrix(,n1)                                     
+  i=2
+  for(var in 1:n1){
+    a=unlist(model.frame(regression)[i], use.names=FALSE)  
+    output[,var]=a
+    i=i+1
+  }
+  for(j in 1:n1){
+    output_2=output[,-j]  
+    if(n3==1){
+      reg=paste("lm(formula = output[,",j,"]~output_2)")
+    }
+    if(n3>1){
+      reg=paste("lm(formula = output[,",j,"]~output_2[,1]")
+      for(k in 2:n3){
+        reg=paste(reg,"+output_2[,",k,"]")
+        if(k==n3){
+          reg=paste(reg,")")
+        }
+      }
+    }
+    r[j]=summary(eval(parse(text=reg)))$r.squared
+  }
+  vif=matrix(,n1)
+  for(k in 1:n1){
+    vif[k]=1/(1-r[k])
+  }
+  return(vif)
+}
+vif(logit)
+
+  ```
+\newpage
+## 3.4 Graphical representation: a dotplot and the CDF
+
+For the last part of the homework I will draw a dotplot that showcases the predicted probabilities of our sample, and the CDF of the "ExitRates" variable.
+
+  ```{r fig.width=5, fig.align="center", fig.height=5, echo=FALSE, message=FALSE}
+# Dotplot of the probabilities
+logit <- glm(Revenue ~ Informational_Duration + ExitRates + PageValues
+             + relev_months_pos+relev_months_neg, data = data, 
+             family = "binomial"(link = "logit"))  
+prlogit <- logit$fitted.values
+ggplot(logit, aes(x = prlogit)) +geom_dotplot(dotsize = 0.0090, stackdir = "up", color="darkblue") + ggtitle("Fig.10: Revenue Distribution") + xlab("Logit: Pr(lfp)") + ylab("Frequency") + theme(
+  plot.title = element_text(hjust = 0.5)
+  )
+
+  ```
+Note that representing the actual count is very difficult (for me at least) in R using "ggplot2".
+
+The plot clearly shows that a great part of the observations have predicted probabilities concentrated near the $0-0.25$ range. Regarding the CDF, the plot clearly shows that a great part of the observations have predicted probabilities concentrated near the $0-0.05$ range. As we can see, the probability of revenue diminishes as the exit rates increases, as it has a negative impact on the dependent variable. Regarding the CDF, the benchmark sets the median for numeric variables and $0$ for the dummies. As the overall probability of buying, within the sample, is rare, the CDF has this functional form.
+
+
+  
+  ```{r fig.width=5, fig.align="center", fig.height=5,echo=FALSE, message=FALSE}
+  
+#  CDF
+
+# Coefficients
+b0                     <- logit$coef[1] # intercept
+Informational_Duration <- logit$coef[2]
+ExitRates              <- logit$coef[3]
+PageValues             <- logit$coef[4]
+relev_months_pos       <- logit$coef[5]
+relev_months_neg       <- logit$coef[6]
+
+# Range of the indep. variable
+X_range <- seq(from=min(data$ExitRates ), to=max(data$ExitRates ), by=.01)
+
+# Values
+a_logits <- b0 + 
+  Informational_Duration*median(data$Informational_Duration) + 
+  ExitRates*X_range + 
+  PageValues*median(data$PageValues) + 
+  relev_months_pos*0 + 
+  relev_months_neg*0 
+
+#Probabilities
+a_probs <- exp(a_logits)/(1 + exp(a_logits))
+
+# Plotting CDF
+plot(X_range, a_probs, 
+     ylim=c(0,1),
+     type="l", 
+     lwd=3, 
+     lty=2, 
+     col="red", 
+     xlab="Exit Rates", ylab="P(outcome)", main="Fig.11 Probability of Revenue")
+
+  ```
+
+# 4.0 Conclusion
+
+From the database analysis we can get several conclusions, with the more inmediate one being that the majority of the purchases were made outside weekends. It is also really clear that a minority of the sessions ended in a purchase, which makes sense, as you usually do not buy something impulsively. This statement is reforced with the percentage of returning visitors over the total, which computes about $80 \%$. As I said in the introduction, the majority of the shopping took place in November, prior to the holidays, I suppose.
+
+From the results of the regression we can conclude that the probability of a session ending in a purchase is rare, with few of the initials variables being relevant. There is no multicollinearity in the variables, and that some of the coefficients are very small because of some values of the variables. A rescale could be a good idea for a better understanding. All the coefficients made sense according to the relation with the independent variable (with "Exit Rates" having the most significant one [^3]).
+ 
+
+[^3]: Notice that the units of this variable are very small.
+
+\newpage
+
+#  Bibliography
+
+Mariel, P. (2019): *Qualitative Dependent Variables*\newline
+
+Google (2019): *How Page Value is calculated*
+Retrieved from: https://support.google.com/analytics/answer/2695658?hl=en \newline
+
+Kaggle (2019): *Online Shopper's Intention*
+Retrieved from: https://www.kaggle.com/roshansharma/online-shoppers-intention \newline
+
+Katircioglu, M. (2018): *Predicting Commercial Intent of Online Consumers using Machine Learning  Techniques* 
+Retrieved from: http://acikerisim.bahcesehir.edu.tr:8080/xmlui/bitstream/handle/123456789/1221/139125.pdf?sequence=1&isAllowed=y

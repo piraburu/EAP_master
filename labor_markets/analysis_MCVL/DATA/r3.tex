@@ -1,0 +1,30 @@
+\begin{table}[htbp]\centering
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\caption{Regressing log(hourly\_wage)}
+\begin{tabular}{l*{1}{c}}
+\hline\hline
+                    &\multicolumn{1}{c}{(1)}\\
+                    &\multicolumn{1}{c}{ln\_h\_wage}\\
+\hline
+level\_inmigrants=1  &      0.0109         \\
+                    &      (1.62)         \\
+[1em]
+level\_inmigrants=2  &      -0.170\sym{***}\\
+                    &    (-22.03)         \\
+[1em]
+level\_inmigrants=3  &      -0.170\sym{***}\\
+                    &    (-35.90)         \\
+[1em]
+level\_inmigrants=4  &           0         \\
+                    &         (.)         \\
+[1em]
+Constant            &       2.204\sym{***}\\
+                    &    (540.77)         \\
+\hline
+Observations        &       81638         \\
+Adjusted \(R^{2}\)  &       0.023         \\
+\hline\hline
+\multicolumn{2}{l}{\footnotesize \textit{t} statistics in parentheses}\\
+\multicolumn{2}{l}{\footnotesize \sym{*} \(p<0.05\), \sym{**} \(p<0.01\), \sym{***} \(p<0.001\)}\\
+\end{tabular}
+\end{table}

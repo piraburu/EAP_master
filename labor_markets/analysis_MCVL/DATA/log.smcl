@@ -1,0 +1,2000 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\pimpeter\Desktop\LABOR_2\DATA\log.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}13 Apr 2020, 02:55:23
+{txt}
+{com}. 
+. clear all
+{txt}
+{com}. set more off
+{txt}
+{com}. 
+. 
+. cd "C:\Users\pimpeter\Desktop\LABOR_2\DATA"
+{res}C:\Users\pimpeter\Desktop\LABOR_2\DATA
+{txt}
+{com}. use "personal16.dta",clear
+{txt}
+{com}. 
+. sort IDENTPERS 
+{txt}
+{com}. 
+. merge IDENTPERS using "afiliados16_1.dta"
+{txt}{p}
+(note: you are using old
+{bf:merge} syntax; see
+{bf:{help merge:[D] merge}} for new syntax)
+{p_end}
+{p 0 4 2}
+variable{txt} IDENTPERS
+does not uniquely identify observations in
+afiliados16_1.dta
+{p_end}
+
+{com}. tab _merge
+
+     {txt}_merge {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          1 {c |}{res}    922,925       13.24       13.24
+{txt}          3 {c |}{res}  6,047,437       86.76      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}  6,970,362      100.00
+{txt}
+{com}. 
+. * The value of 1 means that they belong only to the master file (Personal)
+. * 922,925 
+. * And a value of 3 if they are in both of them
+. * 6,047,437
+. 
+. sort IDENTPERS FALTA FBAJA
+{txt}
+{com}. br IDENTPERS dbirth SEXO FALTA FBAJA _merge if _merge==1
+{txt}
+{com}. * Those who are not matched have no data in FALTA FBAJA
+. 
+. * We loose information because we do not have information for those
+. * individuals that are not present in the afiliacion database.
+. * How many individuals are in both databases? We can check this:
+. 
+. tab indiv _merge
+
+{txt}tag(IDENTP {c |}   _merge
+      ERS) {c |}         3 {c |}     Total
+{hline 11}{c +}{hline 11}{c +}{hline 10}
+         0 {c |}{res} 5,762,230 {txt}{c |}{res} 5,762,230 
+{txt}         1 {c |}{res}   285,207 {txt}{c |}{res}   285,207 
+{txt}{hline 11}{c +}{hline 11}{c +}{hline 10}
+     Total {c |}{res} 6,047,437 {txt}{c |}{res} 6,047,437 
+
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. clear all
+{txt}
+{com}. set more off
+{txt}
+{com}. 
+. cd "C:\Users\pimpeter\Desktop\LABOR_2\DATA" 
+{res}C:\Users\pimpeter\Desktop\LABOR_2\DATA
+{txt}
+{com}. use afiliacion_personal16_2.dta, replace
+{txt}
+{com}. 
+. tab indiv
+
+{txt}tag(IDENTPE {c |}
+        RS) {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          0 {c |}{res}  5,762,230       95.28       95.28
+{txt}          1 {c |}{res}    285,207        4.72      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}  6,047,437      100.00
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. tab situlab if FALTA<=mdy(10,1,2016) & FBAJA>=mdy(10,1,2016) 
+
+                {txt}Labor status {c |}      Freq.     Percent        Cum.
+{hline 29}{c +}{hline 35}
+                    Employed {c |}{res}    135,782       68.45       68.45
+{txt}               Self-employed {c |}{res}     32,170       16.22       84.67
+{txt}                  Unemployed {c |}{res}     20,933       10.55       95.22
+{txt}Special agreement and others {c |}{res}      9,483        4.78      100.00
+{txt}{hline 29}{c +}{hline 35}
+                       Total {c |}{res}    198,368      100.00
+{txt}
+{com}. * 2006
+. tab situlab if FALTA<=mdy(10,1,2006) & FBAJA>=mdy(10,1,2006) 
+
+                {txt}Labor status {c |}      Freq.     Percent        Cum.
+{hline 29}{c +}{hline 35}
+                    Employed {c |}{res}    143,144       75.62       75.62
+{txt}               Self-employed {c |}{res}     31,907       16.86       92.48
+{txt}                  Unemployed {c |}{res}     12,722        6.72       99.20
+{txt}Special agreement and others {c |}{res}      1,520        0.80      100.00
+{txt}{hline 29}{c +}{hline 35}
+                       Total {c |}{res}    189,293      100.00
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. tab situlab SEXO if FALTA<=mdy(10,1,2016) & FBAJA>=mdy(10,1,2016), co 
+{txt}
+{c TLC}{hline 19}{c TRC}
+{c |} Key{col 21}{c |}
+{c LT}{hline 19}{c RT}
+{c |}{space 5}{it:frequency}{col 21}{c |}
+{c |}{space 1}{it:column percentage}{col 21}{c |}
+{c BLC}{hline 19}{c BRC}
+
+                      {c |}         Sexo
+         Labor status {c |}         1          2 {c |}     Total
+{hline 22}{c +}{hline 22}{c +}{hline 10}
+             Employed {c |}{res}    69,362     66,420 {txt}{c |}{res}   135,782 
+                      {txt}{c |}{res}     65.42      71.93 {txt}{c |}{res}     68.45 
+{txt}{hline 22}{c +}{hline 22}{c +}{hline 10}
+        Self-employed {c |}{res}    21,020     11,150 {txt}{c |}{res}    32,170 
+                      {txt}{c |}{res}     19.82      12.08 {txt}{c |}{res}     16.22 
+{txt}{hline 22}{c +}{hline 22}{c +}{hline 10}
+           Unemployed {c |}{res}    10,255     10,678 {txt}{c |}{res}    20,933 
+                      {txt}{c |}{res}      9.67      11.56 {txt}{c |}{res}     10.55 
+{txt}{hline 22}{c +}{hline 22}{c +}{hline 10}
+Special agreement and {c |}{res}     5,395      4,088 {txt}{c |}{res}     9,483 
+                      {txt}{c |}{res}      5.09       4.43 {txt}{c |}{res}      4.78 
+{txt}{hline 22}{c +}{hline 22}{c +}{hline 10}
+                Total {c |}{res}   106,032     92,336 {txt}{c |}{res}   198,368 
+                      {txt}{c |}{res}    100.00     100.00 {txt}{c |}{res}    100.00 
+
+{txt}
+{com}. tab situlab SEXO if FALTA<=mdy(10,1,2006) & FBAJA>=mdy(10,1,2006), co 
+{txt}
+{c TLC}{hline 19}{c TRC}
+{c |} Key{col 21}{c |}
+{c LT}{hline 19}{c RT}
+{c |}{space 5}{it:frequency}{col 21}{c |}
+{c |}{space 1}{it:column percentage}{col 21}{c |}
+{c BLC}{hline 19}{c BRC}
+
+                      {c |}         Sexo
+         Labor status {c |}         1          2 {c |}     Total
+{hline 22}{c +}{hline 22}{c +}{hline 10}
+             Employed {c |}{res}    81,894     61,250 {txt}{c |}{res}   143,144 
+                      {txt}{c |}{res}     73.92      78.03 {txt}{c |}{res}     75.62 
+{txt}{hline 22}{c +}{hline 22}{c +}{hline 10}
+        Self-employed {c |}{res}    21,842     10,065 {txt}{c |}{res}    31,907 
+                      {txt}{c |}{res}     19.71      12.82 {txt}{c |}{res}     16.86 
+{txt}{hline 22}{c +}{hline 22}{c +}{hline 10}
+           Unemployed {c |}{res}     6,017      6,705 {txt}{c |}{res}    12,722 
+                      {txt}{c |}{res}      5.43       8.54 {txt}{c |}{res}      6.72 
+{txt}{hline 22}{c +}{hline 22}{c +}{hline 10}
+Special agreement and {c |}{res}     1,041        479 {txt}{c |}{res}     1,520 
+                      {txt}{c |}{res}      0.94       0.61 {txt}{c |}{res}      0.80 
+{txt}{hline 22}{c +}{hline 22}{c +}{hline 10}
+                Total {c |}{res}   110,794     78,499 {txt}{c |}{res}   189,293 
+                      {txt}{c |}{res}    100.00     100.00 {txt}{c |}{res}    100.00 
+
+{txt}
+{com}. *
+. label define sexo 1"Men" 2"Women"
+{txt}
+{com}. label values SEXO sexo 
+{txt}
+{com}. tab situlab SEXO if FALTA<=mdy(10,1,2016) & FBAJA>=mdy(10,1,2016), co
+{txt}
+{c TLC}{hline 19}{c TRC}
+{c |} Key{col 21}{c |}
+{c LT}{hline 19}{c RT}
+{c |}{space 5}{it:frequency}{col 21}{c |}
+{c |}{space 1}{it:column percentage}{col 21}{c |}
+{c BLC}{hline 19}{c BRC}
+
+                      {c |}         Sexo
+         Labor status {c |}       Men      Women {c |}     Total
+{hline 22}{c +}{hline 22}{c +}{hline 10}
+             Employed {c |}{res}    69,362     66,420 {txt}{c |}{res}   135,782 
+                      {txt}{c |}{res}     65.42      71.93 {txt}{c |}{res}     68.45 
+{txt}{hline 22}{c +}{hline 22}{c +}{hline 10}
+        Self-employed {c |}{res}    21,020     11,150 {txt}{c |}{res}    32,170 
+                      {txt}{c |}{res}     19.82      12.08 {txt}{c |}{res}     16.22 
+{txt}{hline 22}{c +}{hline 22}{c +}{hline 10}
+           Unemployed {c |}{res}    10,255     10,678 {txt}{c |}{res}    20,933 
+                      {txt}{c |}{res}      9.67      11.56 {txt}{c |}{res}     10.55 
+{txt}{hline 22}{c +}{hline 22}{c +}{hline 10}
+Special agreement and {c |}{res}     5,395      4,088 {txt}{c |}{res}     9,483 
+                      {txt}{c |}{res}      5.09       4.43 {txt}{c |}{res}      4.78 
+{txt}{hline 22}{c +}{hline 22}{c +}{hline 10}
+                Total {c |}{res}   106,032     92,336 {txt}{c |}{res}   198,368 
+                      {txt}{c |}{res}    100.00     100.00 {txt}{c |}{res}    100.00 
+
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. gen y_end_panel=mdy(10,1,2016)
+{txt}
+{com}. format y_end_panel %td
+{txt}
+{com}. gen ageOct16=y_end_panel-dbirth
+{txt}(1,067 missing values generated)
+
+{com}. replace ageOct16=int(ageOct16/365)
+{txt}(6,046,370 real changes made)
+
+{com}. gen age_group=.
+{txt}(6,047,437 missing values generated)
+
+{com}. replace age_group=1 if ageOct16<30 
+{txt}(415,204 real changes made)
+
+{com}. replace age_group=2 if ageOct16>=30 & ageOct16<44 
+{txt}(1,969,021 real changes made)
+
+{com}. replace age_group=3 if ageOct16>=44
+{txt}(3,663,212 real changes made)
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. tab situlab age_group if FALTA<=mdy(10,1,2006) & FBAJA>=mdy(10,1,2006),co 
+{txt}
+{c TLC}{hline 19}{c TRC}
+{c |} Key{col 21}{c |}
+{c LT}{hline 19}{c RT}
+{c |}{space 5}{it:frequency}{col 21}{c |}
+{c |}{space 1}{it:column percentage}{col 21}{c |}
+{c BLC}{hline 19}{c BRC}
+
+                      {c |}            age_group
+         Labor status {c |}         1          2          3 {c |}     Total
+{hline 22}{c +}{hline 33}{c +}{hline 10}
+             Employed {c |}{res}     2,533     49,583     91,028 {txt}{c |}{res}   143,144 
+                      {txt}{c |}{res}     94.59      83.41      71.58 {txt}{c |}{res}     75.62 
+{txt}{hline 22}{c +}{hline 33}{c +}{hline 10}
+        Self-employed {c |}{res}        73      6,232     25,602 {txt}{c |}{res}    31,907 
+                      {txt}{c |}{res}      2.73      10.48      20.13 {txt}{c |}{res}     16.86 
+{txt}{hline 22}{c +}{hline 33}{c +}{hline 10}
+           Unemployed {c |}{res}        72      3,605      9,045 {txt}{c |}{res}    12,722 
+                      {txt}{c |}{res}      2.69       6.06       7.11 {txt}{c |}{res}      6.72 
+{txt}{hline 22}{c +}{hline 33}{c +}{hline 10}
+Special agreement and {c |}{res}         0         27      1,493 {txt}{c |}{res}     1,520 
+                      {txt}{c |}{res}      0.00       0.05       1.17 {txt}{c |}{res}      0.80 
+{txt}{hline 22}{c +}{hline 33}{c +}{hline 10}
+                Total {c |}{res}     2,678     59,447    127,168 {txt}{c |}{res}   189,293 
+                      {txt}{c |}{res}    100.00     100.00     100.00 {txt}{c |}{res}    100.00 
+
+{txt}
+{com}. tab situlab age_group if FALTA<=mdy(10,1,2016) & FBAJA>=mdy(10,1,2016),co
+{txt}
+{c TLC}{hline 19}{c TRC}
+{c |} Key{col 21}{c |}
+{c LT}{hline 19}{c RT}
+{c |}{space 5}{it:frequency}{col 21}{c |}
+{c |}{space 1}{it:column percentage}{col 21}{c |}
+{c BLC}{hline 19}{c BRC}
+
+                      {c |}            age_group
+         Labor status {c |}         1          2          3 {c |}     Total
+{hline 22}{c +}{hline 33}{c +}{hline 10}
+             Employed {c |}{res}    18,785     53,814     63,183 {txt}{c |}{res}   135,782 
+                      {txt}{c |}{res}     78.47      74.42      61.87 {txt}{c |}{res}     68.45 
+{txt}{hline 22}{c +}{hline 33}{c +}{hline 10}
+        Self-employed {c |}{res}     1,984     10,298     19,888 {txt}{c |}{res}    32,170 
+                      {txt}{c |}{res}      8.29      14.24      19.47 {txt}{c |}{res}     16.22 
+{txt}{hline 22}{c +}{hline 33}{c +}{hline 10}
+           Unemployed {c |}{res}     2,114      6,031     12,788 {txt}{c |}{res}    20,933 
+                      {txt}{c |}{res}      8.83       8.34      12.52 {txt}{c |}{res}     10.55 
+{txt}{hline 22}{c +}{hline 33}{c +}{hline 10}
+Special agreement and {c |}{res}     1,055      2,164      6,264 {txt}{c |}{res}     9,483 
+                      {txt}{c |}{res}      4.41       2.99       6.13 {txt}{c |}{res}      4.78 
+{txt}{hline 22}{c +}{hline 33}{c +}{hline 10}
+                Total {c |}{res}    23,938     72,307    102,123 {txt}{c |}{res}   198,368 
+                      {txt}{c |}{res}    100.00     100.00     100.00 {txt}{c |}{res}    100.00 
+
+{txt}
+{com}. 
+. 
+. tab situlab age_group if FALTA<=mdy(10,1,2016) & FBAJA>=mdy(10,1,2016), co
+{txt}
+{c TLC}{hline 19}{c TRC}
+{c |} Key{col 21}{c |}
+{c LT}{hline 19}{c RT}
+{c |}{space 5}{it:frequency}{col 21}{c |}
+{c |}{space 1}{it:column percentage}{col 21}{c |}
+{c BLC}{hline 19}{c BRC}
+
+                      {c |}            age_group
+         Labor status {c |}         1          2          3 {c |}     Total
+{hline 22}{c +}{hline 33}{c +}{hline 10}
+             Employed {c |}{res}    18,785     53,814     63,183 {txt}{c |}{res}   135,782 
+                      {txt}{c |}{res}     78.47      74.42      61.87 {txt}{c |}{res}     68.45 
+{txt}{hline 22}{c +}{hline 33}{c +}{hline 10}
+        Self-employed {c |}{res}     1,984     10,298     19,888 {txt}{c |}{res}    32,170 
+                      {txt}{c |}{res}      8.29      14.24      19.47 {txt}{c |}{res}     16.22 
+{txt}{hline 22}{c +}{hline 33}{c +}{hline 10}
+           Unemployed {c |}{res}     2,114      6,031     12,788 {txt}{c |}{res}    20,933 
+                      {txt}{c |}{res}      8.83       8.34      12.52 {txt}{c |}{res}     10.55 
+{txt}{hline 22}{c +}{hline 33}{c +}{hline 10}
+Special agreement and {c |}{res}     1,055      2,164      6,264 {txt}{c |}{res}     9,483 
+                      {txt}{c |}{res}      4.41       2.99       6.13 {txt}{c |}{res}      4.78 
+{txt}{hline 22}{c +}{hline 33}{c +}{hline 10}
+                Total {c |}{res}    23,938     72,307    102,123 {txt}{c |}{res}   198,368 
+                      {txt}{c |}{res}    100.00     100.00     100.00 {txt}{c |}{res}    100.00 
+
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. gen inmigrants=.
+{txt}(6,047,437 missing values generated)
+
+{com}. replace inmigrants=1 if paisnac!="N00"
+{err}paisnac not found
+{txt}{search r(111), local:r(111);}
+
+end of do-file
+
+{search r(111), local:r(111);}
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. gen inmigrants=.
+{err}variable {bf}inmigrants{sf} already defined
+{txt}{search r(110), local:r(110);}
+
+end of do-file
+
+{search r(110), local:r(110);}
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. replace inmigrants=1 if PAISNAC!="N00"
+{txt}(374,235 real changes made)
+
+{com}. replace inmigrants=0 if PAISNAC=="N00"
+{txt}(5,673,202 real changes made)
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. gen nationality=.
+{txt}(6,047,437 missing values generated)
+
+{com}. replace nationality=1 if paisnac=="N01" | PAISNAC=="N10" | ///
+> paisnac=="N11" | PAISNAC=="N15" | PAISNAC=="N16" | PAISNAC=="N19"
+{err}paisnac not found
+{txt}{search r(111), local:r(111);}
+
+end of do-file
+
+{search r(111), local:r(111);}
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. gen nationality=.
+{err}variable {bf}nationality{sf} already defined
+{txt}{search r(110), local:r(110);}
+
+end of do-file
+
+{search r(110), local:r(110);}
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. replace nationality=1 if PAISNAC=="N01" | PAISNAC=="N10" | ///
+> paisnac=="N11" | PAISNAC=="N15" | PAISNAC=="N16" | PAISNAC=="N19"
+{err}paisnac not found
+{txt}{search r(111), local:r(111);}
+
+end of do-file
+
+{search r(111), local:r(111);}
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. replace nationality=1 if PAISNAC=="N01" | PAISNAC=="N10" | ///
+> PAISNAC=="N11" | PAISNAC=="N15" | PAISNAC=="N16" | PAISNAC=="N19"
+{txt}(53,755 real changes made)
+
+{com}. replace nationality=2 if PAISNAC=="N12" | PAISNAC=="N23" 
+{txt}(39,133 real changes made)
+
+{com}. replace nationality=3 if PAISNAC=="N06" | PAISNAC=="N03" | PAISNAC=="N07" | ///
+> PAISNAC=="N08" | PAISNAC=="N09" | PAISNAC=="N13" | PAISNAC=="N22" | ///
+> PAISNAC=="N26" | PAISNAC=="N27"
+{txt}(176,375 real changes made)
+
+{com}. tab nationality, miss
+
+{txt}nationality {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          1 {c |}{res}     53,755        0.89        0.89
+{txt}          2 {c |}{res}     39,133        0.65        1.54
+{txt}          3 {c |}{res}    176,375        2.92        4.45
+{txt}          . {c |}{res}  5,778,174       95.55      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}  6,047,437      100.00
+{txt}
+{com}. replace nationality=4 if nationality==. & PAISNAC!="N00"
+{txt}(104,972 real changes made)
+
+{com}. replace nationality=5 if PAISNAC=="N00"
+{txt}(5,673,202 real changes made)
+
+{com}. 
+. tab situlab nationality if FALTA<=mdy(10,1,2016) & FBAJA>=mdy(10,1,2016),co 
+{txt}
+{c TLC}{hline 19}{c TRC}
+{c |} Key{col 21}{c |}
+{c LT}{hline 19}{c RT}
+{c |}{space 5}{it:frequency}{col 21}{c |}
+{c |}{space 1}{it:column percentage}{col 21}{c |}
+{c BLC}{hline 19}{c BRC}
+
+                      {c |}                      nationality
+         Labor status {c |}         1          2          3          4          5 {c |}     Total
+{hline 22}{c +}{hline 55}{c +}{hline 10}
+             Employed {c |}{res}     1,244        733      5,959      1,534    126,312 {txt}{c |}{res}   135,782 
+                      {txt}{c |}{res}     69.61      59.64      75.20      63.97      68.27 {txt}{c |}{res}     68.45 
+{txt}{hline 22}{c +}{hline 55}{c +}{hline 10}
+        Self-employed {c |}{res}       293        154        804        444     30,475 {txt}{c |}{res}    32,170 
+                      {txt}{c |}{res}     16.40      12.53      10.15      18.52      16.47 {txt}{c |}{res}     16.22 
+{txt}{hline 22}{c +}{hline 55}{c +}{hline 10}
+           Unemployed {c |}{res}       193        245        960        323     19,212 {txt}{c |}{res}    20,933 
+                      {txt}{c |}{res}     10.80      19.93      12.12      13.47      10.38 {txt}{c |}{res}     10.55 
+{txt}{hline 22}{c +}{hline 55}{c +}{hline 10}
+Special agreement and {c |}{res}        57         97        201         97      9,031 {txt}{c |}{res}     9,483 
+                      {txt}{c |}{res}      3.19       7.89       2.54       4.05       4.88 {txt}{c |}{res}      4.78 
+{txt}{hline 22}{c +}{hline 55}{c +}{hline 10}
+                Total {c |}{res}     1,787      1,229      7,924      2,398    185,030 {txt}{c |}{res}   198,368 
+                      {txt}{c |}{res}    100.00     100.00     100.00     100.00     100.00 {txt}{c |}{res}    100.00 
+
+{txt}
+{com}. tab situlab nationality if FALTA<=mdy(10,1,2006) & FBAJA>=mdy(10,1,2006),co
+{txt}
+{c TLC}{hline 19}{c TRC}
+{c |} Key{col 21}{c |}
+{c LT}{hline 19}{c RT}
+{c |}{space 5}{it:frequency}{col 21}{c |}
+{c |}{space 1}{it:column percentage}{col 21}{c |}
+{c BLC}{hline 19}{c BRC}
+
+                      {c |}                      nationality
+         Labor status {c |}         1          2          3          4          5 {c |}     Total
+{hline 22}{c +}{hline 55}{c +}{hline 10}
+             Employed {c |}{res}     1,247        994      4,555      2,020    134,328 {txt}{c |}{res}   143,144 
+                      {txt}{c |}{res}     73.57      80.75      87.06      71.99      75.33 {txt}{c |}{res}     75.62 
+{txt}{hline 22}{c +}{hline 55}{c +}{hline 10}
+        Self-employed {c |}{res}       314        133        429        536     30,495 {txt}{c |}{res}    31,907 
+                      {txt}{c |}{res}     18.53      10.80       8.20      19.10      17.10 {txt}{c |}{res}     16.86 
+{txt}{hline 22}{c +}{hline 55}{c +}{hline 10}
+           Unemployed {c |}{res}       128         94        237        207     12,056 {txt}{c |}{res}    12,722 
+                      {txt}{c |}{res}      7.55       7.64       4.53       7.38       6.76 {txt}{c |}{res}      6.72 
+{txt}{hline 22}{c +}{hline 55}{c +}{hline 10}
+Special agreement and {c |}{res}         6         10         11         43      1,450 {txt}{c |}{res}     1,520 
+                      {txt}{c |}{res}      0.35       0.81       0.21       1.53       0.81 {txt}{c |}{res}      0.80 
+{txt}{hline 22}{c +}{hline 55}{c +}{hline 10}
+                Total {c |}{res}     1,695      1,231      5,232      2,806    178,329 {txt}{c |}{res}   189,293 
+                      {txt}{c |}{res}    100.00     100.00     100.00     100.00     100.00 {txt}{c |}{res}    100.00 
+
+{txt}
+{com}. 
+. tab situlab inmigrants if FALTA<=mdy(10,1,2016) & FBAJA>=mdy(10,1,2016),co 
+{txt}
+{c TLC}{hline 19}{c TRC}
+{c |} Key{col 21}{c |}
+{c LT}{hline 19}{c RT}
+{c |}{space 5}{it:frequency}{col 21}{c |}
+{c |}{space 1}{it:column percentage}{col 21}{c |}
+{c BLC}{hline 19}{c BRC}
+
+                      {c |}      inmigrants
+         Labor status {c |}         0          1 {c |}     Total
+{hline 22}{c +}{hline 22}{c +}{hline 10}
+             Employed {c |}{res}   126,312      9,470 {txt}{c |}{res}   135,782 
+                      {txt}{c |}{res}     68.27      71.00 {txt}{c |}{res}     68.45 
+{txt}{hline 22}{c +}{hline 22}{c +}{hline 10}
+        Self-employed {c |}{res}    30,475      1,695 {txt}{c |}{res}    32,170 
+                      {txt}{c |}{res}     16.47      12.71 {txt}{c |}{res}     16.22 
+{txt}{hline 22}{c +}{hline 22}{c +}{hline 10}
+           Unemployed {c |}{res}    19,212      1,721 {txt}{c |}{res}    20,933 
+                      {txt}{c |}{res}     10.38      12.90 {txt}{c |}{res}     10.55 
+{txt}{hline 22}{c +}{hline 22}{c +}{hline 10}
+Special agreement and {c |}{res}     9,031        452 {txt}{c |}{res}     9,483 
+                      {txt}{c |}{res}      4.88       3.39 {txt}{c |}{res}      4.78 
+{txt}{hline 22}{c +}{hline 22}{c +}{hline 10}
+                Total {c |}{res}   185,030     13,338 {txt}{c |}{res}   198,368 
+                      {txt}{c |}{res}    100.00     100.00 {txt}{c |}{res}    100.00 
+
+{txt}
+{com}. tab situlab inmigrants if FALTA<=mdy(10,1,2006) & FBAJA>=mdy(10,1,2006),co 
+{txt}
+{c TLC}{hline 19}{c TRC}
+{c |} Key{col 21}{c |}
+{c LT}{hline 19}{c RT}
+{c |}{space 5}{it:frequency}{col 21}{c |}
+{c |}{space 1}{it:column percentage}{col 21}{c |}
+{c BLC}{hline 19}{c BRC}
+
+                      {c |}      inmigrants
+         Labor status {c |}         0          1 {c |}     Total
+{hline 22}{c +}{hline 22}{c +}{hline 10}
+             Employed {c |}{res}   134,328      8,816 {txt}{c |}{res}   143,144 
+                      {txt}{c |}{res}     75.33      80.41 {txt}{c |}{res}     75.62 
+{txt}{hline 22}{c +}{hline 22}{c +}{hline 10}
+        Self-employed {c |}{res}    30,495      1,412 {txt}{c |}{res}    31,907 
+                      {txt}{c |}{res}     17.10      12.88 {txt}{c |}{res}     16.86 
+{txt}{hline 22}{c +}{hline 22}{c +}{hline 10}
+           Unemployed {c |}{res}    12,056        666 {txt}{c |}{res}    12,722 
+                      {txt}{c |}{res}      6.76       6.07 {txt}{c |}{res}      6.72 
+{txt}{hline 22}{c +}{hline 22}{c +}{hline 10}
+Special agreement and {c |}{res}     1,450         70 {txt}{c |}{res}     1,520 
+                      {txt}{c |}{res}      0.81       0.64 {txt}{c |}{res}      0.80 
+{txt}{hline 22}{c +}{hline 22}{c +}{hline 10}
+                Total {c |}{res}   178,329     10,964 {txt}{c |}{res}   189,293 
+                      {txt}{c |}{res}    100.00     100.00 {txt}{c |}{res}    100.00 
+
+{txt}
+{com}. 
+. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. label define natgroups 1"EU12" 2"Africa" 3"South America" 4"Others" 5 "Spanish", replace
+{txt}
+{com}. label values nationality natgroups
+{txt}
+{com}. tab situlab nationality if FALTA<=mdy(10,1,2016) & FBAJA>=mdy(10,1,2016), co
+{txt}
+{c TLC}{hline 19}{c TRC}
+{c |} Key{col 21}{c |}
+{c LT}{hline 19}{c RT}
+{c |}{space 5}{it:frequency}{col 21}{c |}
+{c |}{space 1}{it:column percentage}{col 21}{c |}
+{c BLC}{hline 19}{c BRC}
+
+                      {c |}                      nationality
+         Labor status {c |}      EU12     Africa  South Ame     Others    Spanish {c |}     Total
+{hline 22}{c +}{hline 55}{c +}{hline 10}
+             Employed {c |}{res}     1,244        733      5,959      1,534    126,312 {txt}{c |}{res}   135,782 
+                      {txt}{c |}{res}     69.61      59.64      75.20      63.97      68.27 {txt}{c |}{res}     68.45 
+{txt}{hline 22}{c +}{hline 55}{c +}{hline 10}
+        Self-employed {c |}{res}       293        154        804        444     30,475 {txt}{c |}{res}    32,170 
+                      {txt}{c |}{res}     16.40      12.53      10.15      18.52      16.47 {txt}{c |}{res}     16.22 
+{txt}{hline 22}{c +}{hline 55}{c +}{hline 10}
+           Unemployed {c |}{res}       193        245        960        323     19,212 {txt}{c |}{res}    20,933 
+                      {txt}{c |}{res}     10.80      19.93      12.12      13.47      10.38 {txt}{c |}{res}     10.55 
+{txt}{hline 22}{c +}{hline 55}{c +}{hline 10}
+Special agreement and {c |}{res}        57         97        201         97      9,031 {txt}{c |}{res}     9,483 
+                      {txt}{c |}{res}      3.19       7.89       2.54       4.05       4.88 {txt}{c |}{res}      4.78 
+{txt}{hline 22}{c +}{hline 55}{c +}{hline 10}
+                Total {c |}{res}     1,787      1,229      7,924      2,398    185,030 {txt}{c |}{res}   198,368 
+                      {txt}{c |}{res}    100.00     100.00     100.00     100.00     100.00 {txt}{c |}{res}    100.00 
+
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. save "ex2.dta", replace
+{txt}file ex2.dta saved
+
+{com}. 
+. ********************************************************************************
+. * EXERCISE 3:
+. *
+. clear all
+{txt}
+{com}. set more off
+{txt}
+{com}. 
+. cd "C:\Users\pimpeter\Desktop\LABOR_2\DATA" 
+{res}C:\Users\pimpeter\Desktop\LABOR_2\DATA
+{txt}
+{com}. use ex2.dta, replace
+{txt}
+{com}. 
+. gen hworked2=(COEFPARC/1000)*8
+{txt}
+{com}. replace hworked2=8 if COEFPARC==0
+{txt}(5,173,232 real changes made)
+
+{com}. drop hworked
+{txt}
+{com}. rename hworked2 hworked
+{res}{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. tab tipo if FALTA<=mdy(10,1,2016) & FBAJA>=mdy(10,1,2016) 
+
+    {txt}Type of {c |}
+   contract {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+   Indef FT {c |}{res}     72,790       53.61       53.61
+{txt}   Indef PT {c |}{res}     16,902       12.45       66.06
+{txt}    Temp FT {c |}{res}     22,285       16.41       82.47
+{txt}    Temp PT {c |}{res}     13,169        9.70       92.17
+{txt}    Unknown {c |}{res}     10,636        7.83      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}    135,782      100.00
+{txt}
+{com}. * By gender
+. tab tipo SEXO if FALTA<=mdy(10,1,2016) & FBAJA>=mdy(10,1,2016),co 
+{txt}
+{c TLC}{hline 19}{c TRC}
+{c |} Key{col 21}{c |}
+{c LT}{hline 19}{c RT}
+{c |}{space 5}{it:frequency}{col 21}{c |}
+{c |}{space 1}{it:column percentage}{col 21}{c |}
+{c BLC}{hline 19}{c BRC}
+
+   Type of {c |}         Sexo
+  contract {c |}       Men      Women {c |}     Total
+{hline 11}{c +}{hline 22}{c +}{hline 10}
+  Indef FT {c |}{res}    42,670     30,120 {txt}{c |}{res}    72,790 
+           {txt}{c |}{res}     61.52      45.35 {txt}{c |}{res}     53.61 
+{txt}{hline 11}{c +}{hline 22}{c +}{hline 10}
+  Indef PT {c |}{res}     4,452     12,450 {txt}{c |}{res}    16,902 
+           {txt}{c |}{res}      6.42      18.74 {txt}{c |}{res}     12.45 
+{txt}{hline 11}{c +}{hline 22}{c +}{hline 10}
+   Temp FT {c |}{res}    12,544      9,741 {txt}{c |}{res}    22,285 
+           {txt}{c |}{res}     18.08      14.67 {txt}{c |}{res}     16.41 
+{txt}{hline 11}{c +}{hline 22}{c +}{hline 10}
+   Temp PT {c |}{res}     4,942      8,227 {txt}{c |}{res}    13,169 
+           {txt}{c |}{res}      7.12      12.39 {txt}{c |}{res}      9.70 
+{txt}{hline 11}{c +}{hline 22}{c +}{hline 10}
+   Unknown {c |}{res}     4,754      5,882 {txt}{c |}{res}    10,636 
+           {txt}{c |}{res}      6.85       8.86 {txt}{c |}{res}      7.83 
+{txt}{hline 11}{c +}{hline 22}{c +}{hline 10}
+     Total {c |}{res}    69,362     66,420 {txt}{c |}{res}   135,782 
+           {txt}{c |}{res}    100.00     100.00 {txt}{c |}{res}    100.00 
+
+{txt}
+{com}. * AGE 
+. tab tipo age_group if FALTA<=mdy(10,1,2016) & FBAJA>=mdy(10,1,2016),co 
+{txt}
+{c TLC}{hline 19}{c TRC}
+{c |} Key{col 21}{c |}
+{c LT}{hline 19}{c RT}
+{c |}{space 5}{it:frequency}{col 21}{c |}
+{c |}{space 1}{it:column percentage}{col 21}{c |}
+{c BLC}{hline 19}{c BRC}
+
+   Type of {c |}            age_group
+  contract {c |}         1          2          3 {c |}     Total
+{hline 11}{c +}{hline 33}{c +}{hline 10}
+  Indef FT {c |}{res}     5,858     31,281     35,651 {txt}{c |}{res}    72,790 
+           {txt}{c |}{res}     31.18      58.13      56.42 {txt}{c |}{res}     53.61 
+{txt}{hline 11}{c +}{hline 33}{c +}{hline 10}
+  Indef PT {c |}{res}     2,695      6,283      7,924 {txt}{c |}{res}    16,902 
+           {txt}{c |}{res}     14.35      11.68      12.54 {txt}{c |}{res}     12.45 
+{txt}{hline 11}{c +}{hline 33}{c +}{hline 10}
+   Temp FT {c |}{res}     5,506      9,370      7,409 {txt}{c |}{res}    22,285 
+           {txt}{c |}{res}     29.31      17.41      11.73 {txt}{c |}{res}     16.41 
+{txt}{hline 11}{c +}{hline 33}{c +}{hline 10}
+   Temp PT {c |}{res}     3,828      4,384      4,957 {txt}{c |}{res}    13,169 
+           {txt}{c |}{res}     20.38       8.15       7.85 {txt}{c |}{res}      9.70 
+{txt}{hline 11}{c +}{hline 33}{c +}{hline 10}
+   Unknown {c |}{res}       898      2,496      7,242 {txt}{c |}{res}    10,636 
+           {txt}{c |}{res}      4.78       4.64      11.46 {txt}{c |}{res}      7.83 
+{txt}{hline 11}{c +}{hline 33}{c +}{hline 10}
+     Total {c |}{res}    18,785     53,814     63,183 {txt}{c |}{res}   135,782 
+           {txt}{c |}{res}    100.00     100.00     100.00 {txt}{c |}{res}    100.00 
+
+{txt}
+{com}. * NATIONALITY
+. tab tipo nationality if FALTA<=mdy(10,1,2016) & FBAJA>=mdy(10,1,2016),co 
+{txt}
+{c TLC}{hline 19}{c TRC}
+{c |} Key{col 21}{c |}
+{c LT}{hline 19}{c RT}
+{c |}{space 5}{it:frequency}{col 21}{c |}
+{c |}{space 1}{it:column percentage}{col 21}{c |}
+{c BLC}{hline 19}{c BRC}
+
+   Type of {c |}                      nationality
+  contract {c |}      EU12     Africa  South Ame     Others    Spanish {c |}     Total
+{hline 11}{c +}{hline 55}{c +}{hline 10}
+  Indef FT {c |}{res}       716        395      2,567        841     68,271 {txt}{c |}{res}    72,790 
+           {txt}{c |}{res}     57.56      53.89      43.08      54.82      54.05 {txt}{c |}{res}     53.61 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+  Indef PT {c |}{res}       153        116      1,419        220     14,994 {txt}{c |}{res}    16,902 
+           {txt}{c |}{res}     12.30      15.83      23.81      14.34      11.87 {txt}{c |}{res}     12.45 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+   Temp FT {c |}{res}       192        111      1,019        250     20,713 {txt}{c |}{res}    22,285 
+           {txt}{c |}{res}     15.43      15.14      17.10      16.30      16.40 {txt}{c |}{res}     16.41 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+   Temp PT {c |}{res}       108         79        845        150     11,987 {txt}{c |}{res}    13,169 
+           {txt}{c |}{res}      8.68      10.78      14.18       9.78       9.49 {txt}{c |}{res}      9.70 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+   Unknown {c |}{res}        75         32        109         73     10,347 {txt}{c |}{res}    10,636 
+           {txt}{c |}{res}      6.03       4.37       1.83       4.76       8.19 {txt}{c |}{res}      7.83 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+     Total {c |}{res}     1,244        733      5,959      1,534    126,312 {txt}{c |}{res}   135,782 
+           {txt}{c |}{res}    100.00     100.00     100.00     100.00     100.00 {txt}{c |}{res}    100.00 
+
+{txt}
+{com}. dy(10,1,2016) & FBAJA>=mdy(10,1,2016), sum (hworked)
+{err}command {bf}dy{sf} is unrecognized
+{txt}{search r(199), local:r(199);}
+
+end of do-file
+
+{search r(199), local:r(199);}
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. * All
+. tab tipo if FALTA<=mdy(10,1,2016) & FBAJA>=mdy(10,1,2016), sum (hworked)
+
+    {txt}Type of {c |}         Summary of hworked
+   contract {c |}        Mean   Std. Dev.       Freq.
+{hline 12}{c +}{hline 36}
+   Indef FT {c |}  {res} 7.8081598   .85415417      72,790
+  {txt} Indef PT {c |}  {res} 4.8280895   2.1440006      16,902
+  {txt}  Temp FT {c |}  {res} 7.9682911   .32342251      22,285
+  {txt}  Temp PT {c |}  {res} 3.9705071   2.1347948      13,169
+  {txt}  Unknown {c |}  {res} 7.8700188   .69336688      10,636
+{txt}{hline 12}{c +}{hline 36}
+      Total {c |}  {res} 7.0961307   1.8685441     135,782
+{txt}
+{com}. * By gender
+. tab tipo SEXO if FALTA<=mdy(10,1,2016) & FBAJA>=mdy(10,1,2016), sum (hworked)
+
+           {txt}Means, Standard Deviations and Frequencies of hworked
+
+   Type of {c |}        Sexo
+  contract {c |}       Men      Women {c |}     Total
+{hline 11}{c +}{hline 22}{c +}{hline 10}
+  Indef FT {c |}{res} 7.9538107   7.601821 {txt}{c |}{res} 7.8081598
+           {txt}{c |}{res} .46588903  1.1760351 {txt}{c |}{res} .85415417
+           {txt}{c |}{res}     42670      30120 {txt}{c |}{res}     72790
+{txt}{hline 11}{c +}{hline 22}{c +}{hline 10}
+  Indef PT {c |}{res} 4.3375112  5.0035155 {txt}{c |}{res} 4.8280895
+           {txt}{c |}{res} 1.9649798  2.1779043 {txt}{c |}{res} 2.1440006
+           {txt}{c |}{res}      4452      12450 {txt}{c |}{res}     16902
+{txt}{hline 11}{c +}{hline 22}{c +}{hline 10}
+   Temp FT {c |}{res} 7.9898508  7.9405277 {txt}{c |}{res} 7.9682911
+           {txt}{c |}{res} .19397923  .43530622 {txt}{c |}{res} .32342251
+           {txt}{c |}{res}     12544       9741 {txt}{c |}{res}     22285
+{txt}{hline 11}{c +}{hline 22}{c +}{hline 10}
+   Temp PT {c |}{res} 3.5120437  4.2459084 {txt}{c |}{res} 3.9705071
+           {txt}{c |}{res} 1.9590368  2.1881401 {txt}{c |}{res} 2.1347948
+           {txt}{c |}{res}      4942       8227 {txt}{c |}{res}     13169
+{txt}{hline 11}{c +}{hline 22}{c +}{hline 10}
+   Unknown {c |}{res} 7.9203601  7.8293315 {txt}{c |}{res} 7.8700188
+           {txt}{c |}{res} .58032138   .7703914 {txt}{c |}{res} .69336688
+           {txt}{c |}{res}      4754       5882 {txt}{c |}{res}     10636
+{txt}{hline 11}{c +}{hline 22}{c +}{hline 10}
+     Total {c |}{res} 7.4094505  6.7689327 {txt}{c |}{res} 7.0961307
+           {txt}{c |}{res} 1.6228594  2.0439447 {txt}{c |}{res} 1.8685441
+           {txt}{c |}{res}     69362      66420 {txt}{c |}{res}    135782
+{txt}
+{com}. * AGE 
+. tab tipo age_group if FALTA<=mdy(10,1,2016) & FBAJA>=mdy(10,1,2016), sum (hworked)
+
+           {txt}Means, Standard Deviations and Frequencies of hworked
+
+   Type of {c |}           age_group
+  contract {c |}         1          2          3 {c |}     Total
+{hline 11}{c +}{hline 33}{c +}{hline 10}
+  Indef FT {c |}{res} 7.7717788  7.7647901  7.8521913 {txt}{c |}{res} 7.8081598
+           {txt}{c |}{res} 1.0657358  .86869196  .79818534 {txt}{c |}{res} .85415417
+           {txt}{c |}{res}      5858      31281      35651 {txt}{c |}{res}     72790
+{txt}{hline 11}{c +}{hline 33}{c +}{hline 10}
+  Indef PT {c |}{res}  4.477741   4.890982  4.8973771 {txt}{c |}{res} 4.8280895
+           {txt}{c |}{res} 1.9555311  2.0063614  2.2943101 {txt}{c |}{res} 2.1440006
+           {txt}{c |}{res}      2695       6283       7924 {txt}{c |}{res}     16902
+{txt}{hline 11}{c +}{hline 33}{c +}{hline 10}
+   Temp FT {c |}{res} 7.9836527  7.9495351  7.9805955 {txt}{c |}{res} 7.9682911
+           {txt}{c |}{res} .27654142  .39783644    .238497 {txt}{c |}{res} .32342251
+           {txt}{c |}{res}      5506       9370       7409 {txt}{c |}{res}     22285
+{txt}{hline 11}{c +}{hline 33}{c +}{hline 10}
+   Temp PT {c |}{res}  3.889814  4.2749179   3.763599 {txt}{c |}{res} 3.9705071
+           {txt}{c |}{res} 1.9009519  2.0365319  2.3495976 {txt}{c |}{res} 2.1347948
+           {txt}{c |}{res}      3828       4384       4957 {txt}{c |}{res}     13169
+{txt}{hline 11}{c +}{hline 33}{c +}{hline 10}
+   Unknown {c |}{res} 7.8627082  7.7434295  7.9145551 {txt}{c |}{res} 7.8700188
+           {txt}{c |}{res} .74141162  .92529938  .57920598 {txt}{c |}{res} .69336688
+           {txt}{c |}{res}       898       2496       7242 {txt}{c |}{res}     10636
+{txt}{hline 11}{c +}{hline 33}{c +}{hline 10}
+     Total {c |}{res}  6.574581  7.1761331  7.1830538 {txt}{c |}{res} 7.0961307
+           {txt}{c |}{res} 2.2125823  1.7115889  1.8597995 {txt}{c |}{res} 1.8685441
+           {txt}{c |}{res}     18785      53814      63183 {txt}{c |}{res}    135782
+{txt}
+{com}. * NATIONALITY
+. tab tipo nationality if FALTA<=mdy(10,1,2016) & FBAJA>=mdy(10,1,2016), sum (hworked)
+
+           {txt}Means, Standard Deviations and Frequencies of hworked
+
+   Type of {c |}                    nationality
+  contract {c |}      EU12     Africa  South Ame     Others    Spanish {c |}     Total
+{hline 11}{c +}{hline 55}{c +}{hline 10}
+  Indef FT {c |}{res} 7.8144916  7.9017924  7.8839829   7.918887  7.8033367 {txt}{c |}{res} 7.8081598
+           {txt}{c |}{res}  .7873041  .62271049  .66972189   .5637494  .86483085 {txt}{c |}{res} .85415417
+           {txt}{c |}{res}       716        395       2567        841      68271 {txt}{c |}{res}     72790
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+  Indef PT {c |}{res} 4.9006013  5.1451724  5.4700493  4.9892727  4.7617778 {txt}{c |}{res} 4.8280895
+           {txt}{c |}{res}  2.180369  2.4449712  2.4223645  2.1263772  2.1028655 {txt}{c |}{res} 2.1440006
+           {txt}{c |}{res}       153        116       1419        220      14994 {txt}{c |}{res}     16902
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+   Temp FT {c |}{res}   7.97375          8  7.9763847          8  7.9672897 {txt}{c |}{res} 7.9682911
+           {txt}{c |}{res}  .2657923          0  .27771717          0  .32875053 {txt}{c |}{res} .32342251
+           {txt}{c |}{res}       192        111       1019        250      20713 {txt}{c |}{res}     22285
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+   Temp PT {c |}{res} 4.3493333   4.417519  4.8191337    4.08224  3.9029275 {txt}{c |}{res} 3.9705071
+           {txt}{c |}{res} 2.1792584  2.3145684  2.4030301  2.1612777  2.0992196 {txt}{c |}{res} 2.1347948
+           {txt}{c |}{res}       108         79        845        150      11987 {txt}{c |}{res}     13169
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+   Unknown {c |}{res} 7.9432533          8  7.8676697  7.8350685  7.8693573 {txt}{c |}{res} 7.8700188
+           {txt}{c |}{res} .33491762          0  .62216591  .70279522  .69699803 {txt}{c |}{res} .69336688
+           {txt}{c |}{res}        75         32        109         73      10347 {txt}{c |}{res}     10636
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+     Total {c |}{res} 7.1876206  7.1091842  6.8900594  7.1328031  7.1044303 {txt}{c |}{res} 7.0961307
+           {txt}{c |}{res}  1.750507  1.8989286  2.0399445  1.8309407  1.8609204 {txt}{c |}{res} 1.8685441
+           {txt}{c |}{res}      1244        733       5959       1534     126312 {txt}{c |}{res}    135782
+{txt}
+{com}. *****************
+. 
+. 
+. * BY GENDER
+. tab tipo SEXO if FALTA<=mdy(10,1,2016) & FBAJA>=mdy(10,1,2016)
+
+   {txt}Type of {c |}         Sexo
+  contract {c |}       Men      Women {c |}     Total
+{hline 11}{c +}{hline 22}{c +}{hline 10}
+  Indef FT {c |}{res}    42,670     30,120 {txt}{c |}{res}    72,790 
+{txt}  Indef PT {c |}{res}     4,452     12,450 {txt}{c |}{res}    16,902 
+{txt}   Temp FT {c |}{res}    12,544      9,741 {txt}{c |}{res}    22,285 
+{txt}   Temp PT {c |}{res}     4,942      8,227 {txt}{c |}{res}    13,169 
+{txt}   Unknown {c |}{res}     4,754      5,882 {txt}{c |}{res}    10,636 
+{txt}{hline 11}{c +}{hline 22}{c +}{hline 10}
+     Total {c |}{res}    69,362     66,420 {txt}{c |}{res}   135,782 
+
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. tab tipo nationality if FALTA<=mdy(10,1,2016) & FBAJA>=mdy(10,1,2016)
+
+   {txt}Type of {c |}                      nationality
+  contract {c |}      EU12     Africa  South Ame     Others    Spanish {c |}     Total
+{hline 11}{c +}{hline 55}{c +}{hline 10}
+  Indef FT {c |}{res}       716        395      2,567        841     68,271 {txt}{c |}{res}    72,790 
+{txt}  Indef PT {c |}{res}       153        116      1,419        220     14,994 {txt}{c |}{res}    16,902 
+{txt}   Temp FT {c |}{res}       192        111      1,019        250     20,713 {txt}{c |}{res}    22,285 
+{txt}   Temp PT {c |}{res}       108         79        845        150     11,987 {txt}{c |}{res}    13,169 
+{txt}   Unknown {c |}{res}        75         32        109         73     10,347 {txt}{c |}{res}    10,636 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+     Total {c |}{res}     1,244        733      5,959      1,534    126,312 {txt}{c |}{res}   135,782 
+
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. tab tipo nationality if FALTA<=mdy(10,1,2016) & FBAJA>=mdy(10,1,2016)
+
+   {txt}Type of {c |}                      nationality
+  contract {c |}      EU12     Africa  South Ame     Others    Spanish {c |}     Total
+{hline 11}{c +}{hline 55}{c +}{hline 10}
+  Indef FT {c |}{res}       716        395      2,567        841     68,271 {txt}{c |}{res}    72,790 
+{txt}  Indef PT {c |}{res}       153        116      1,419        220     14,994 {txt}{c |}{res}    16,902 
+{txt}   Temp FT {c |}{res}       192        111      1,019        250     20,713 {txt}{c |}{res}    22,285 
+{txt}   Temp PT {c |}{res}       108         79        845        150     11,987 {txt}{c |}{res}    13,169 
+{txt}   Unknown {c |}{res}        75         32        109         73     10,347 {txt}{c |}{res}    10,636 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+     Total {c |}{res}     1,244        733      5,959      1,534    126,312 {txt}{c |}{res}   135,782 
+
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. clear all
+{txt}
+{com}. set more off
+{txt}
+{com}. 
+. 
+. 
+. cd "C:\Users\pimpeter\Desktop\LABOR_2\DATA"
+{res}C:\Users\pimpeter\Desktop\LABOR_2\DATA
+{txt}
+{com}. use "data.dta",clear
+{txt}
+{com}. 
+. label var age_oct16 "Age of the individual at October 2016"
+{txt}
+{com}. label var age_cycle "Age of the individual at that cycle"
+{txt}
+{com}. label var age_cycle "Age of the individual at that cycle"
+{txt}
+{com}. label var minFALTAwm "Labor experience-Starting working day"
+{txt}
+{com}. 
+. save, replace
+{txt}file data.dta saved
+
+{com}. * 108,564 individuals
+. 
+. 
+. * We have to include data from residence.
+. use SDFMCVL2016PERSONAL.dta, clear
+{txt}
+{com}. keep IDENTPERS DOMICILIO PROVPRIAF
+{txt}
+{com}. 
+. sort IDENTPERS
+{txt}
+{com}. save provinces_info.dta, replace
+{txt}file provinces_info.dta saved
+
+{com}. 
+. 
+. use data.dta, clear
+{txt}
+{com}. sort IDENTPERS
+{txt}
+{com}. rename _merge merge
+{res}{txt}
+{com}. merge m:1 IDENTPERS using provinces_info.dta
+{res}
+{txt}{col 5}Result{col 38}# of obs.
+{col 5}{hline 41}
+{col 5}not matched{col 30}{res}       1,099,568
+{txt}{col 9}from master{col 30}{res}               0{txt}  (_merge==1)
+{col 9}from using{col 30}{res}       1,099,568{txt}  (_merge==2)
+
+{col 5}matched{col 30}{res}       2,388,408{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. 
+. 
+. save data_2.dta, replace
+{txt}file data_2.dta saved
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. clear all
+{txt}
+{com}. set more off
+{txt}
+{com}. 
+. 
+. 
+. cd "C:\Users\pimpeter\Desktop\LABOR_2\DATA"
+{res}C:\Users\pimpeter\Desktop\LABOR_2\DATA
+{txt}
+{com}. use "data_2.dta",clear
+{txt}
+{com}. 
+. label var FALTA "Staring date of afiliation episode on the Social Security"
+{txt}
+{com}. label var FBAJA "Ending date of afiliation episode on the Social Security"
+{txt}
+{com}. 
+. *Compute total time as employed, self-employed and unemployed at each t 
+. *with using current_empdur current_selfempdur current_unempdur
+. 
+. label var wage "Proxy of wages for each cycle"
+{txt}
+{com}. label var year "Year"
+{txt}
+{com}. label var nindef_t "Number of indefinite contracts in each cycle per individual"
+{txt}
+{com}. label var ntemp_t "Number of temporary contracts in each cycle per individual"
+{txt}
+{com}. label var time_emp "Number of temporary contracts in each cycle per individual"
+{txt}
+{com}. 
+. save, replace
+{txt}file data_2.dta saved
+
+{com}. 
+. * I have 108564 individuals after I dropped out 6713 (so, we had 115,277)
+. 
+. drop if indiv==.
+{txt}(1,099,568 observations deleted)
+
+{com}. 
+. * Number of total observations
+. display 108564*22
+{res}2388408
+{txt}
+{com}. 
+. des
+
+{txt}Contains data from {res}data_2.dta
+{txt}  obs:{res}     2,388,408                          
+{txt} vars:{res}            45                          13 Apr 2020 02:59
+{txt} size:{res}   229,287,168                          
+{txt}{hline}
+              storage   display    value
+variable name   type    format     label      variable label
+{hline}
+{p 0 48}{res}{bind:IDENTPERS      }{txt}{bind: str15   }{bind:{txt}%15s      }{space 1}{bind:         }{bind:  }{res}{res}Identificador de la persona{p_end}
+{p 0 48}{bind:t              }{txt}{bind: byte    }{bind:{txt}%10.0g    }{space 1}{bind:         }{bind:  }{res}{res}{p_end}
+{p 0 48}{bind:FALTA          }{txt}{bind: int     }{bind:{txt}%td       }{space 1}{bind:         }{bind:  }{res}{res}Staring date of afiliation episode on the Social Security{p_end}
+{p 0 48}{bind:FBAJA          }{txt}{bind: int     }{bind:{txt}%td       }{space 1}{bind:         }{bind:  }{res}{res}Ending date of afiliation episode on the Social Security{p_end}
+{p 0 48}{bind:dbirth         }{txt}{bind: int     }{bind:{txt}%td       }{space 1}{bind:         }{bind:  }{res}{res}Date of birth{p_end}
+{p 0 48}{bind:provnac        }{txt}{bind: byte    }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Province of birth{p_end}
+{p 0 48}{bind:nacionalidad   }{txt}{bind: str3    }{bind:{txt}%9s       }{space 1}{bind:         }{bind:  }{res}{res}Nacionality{p_end}
+{p 0 48}{bind:gender         }{txt}{bind: byte    }{bind:{txt}%9.0g     }{space 1}{bind:gender   }{bind:  }{res}{res}Gender{p_end}
+{p 0 48}{bind:situlab        }{txt}{bind: byte    }{bind:{txt}%28.0g    }{space 1}{bind:situlab  }{bind:  }{res}{res}Labor status{p_end}
+{p 0 48}{bind:tipo           }{txt}{bind: byte    }{bind:{txt}%9.0g     }{space 1}{bind:tipo     }{bind:  }{res}{res}Type of contract{p_end}
+{p 0 48}{bind:grupcot        }{txt}{bind: byte    }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Quote group{p_end}
+{p 0 48}{bind:paisnac        }{txt}{bind: str3    }{bind:{txt}%9s       }{space 1}{bind:         }{bind:  }{res}{res}Country of birth{p_end}
+{p 0 48}{bind:minFALTA       }{txt}{bind: int     }{bind:{txt}%td       }{space 1}{bind:         }{bind:  }{res}{res}Labor experience-Starting working day{p_end}
+{p 0 48}{bind:current_empdur }{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Total time as employed until current contract{p_end}
+{p 0 48}{bind:current_self_~r}{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Total time as self-employed until current contract{p_end}
+{p 0 48}{bind:curr_unempdur  }{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Total time as unemployed until current contract{p_end}
+{p 0 48}{bind:ntemp          }{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Nº of temporary contract until current contract{p_end}
+{p 0 48}{bind:nindef         }{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Nº of indefinite contract until current contract{p_end}
+{p 0 48}{bind:hworked        }{txt}{bind: float   }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Hours worked{p_end}
+{p 0 48}{bind:CNAE09         }{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Economic activity according to CNAE 2009 of the listing account{p_end}
+{p 0 48}{bind:FTPT           }{txt}{bind: byte    }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Full or Part time contract{p_end}
+{p 0 48}{bind:ddeath         }{txt}{bind: int     }{bind:{txt}%td       }{space 1}{bind:         }{bind:  }{res}{res}Date of death{p_end}
+{p 0 48}{bind:education      }{txt}{bind: str2    }{bind:{txt}%9s       }{space 1}{bind:         }{bind:  }{res}{res}Years of education?{p_end}
+{p 0 48}{bind:start_age      }{txt}{bind: byte    }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Age at the beginning of the episode{p_end}
+{p 0 48}{bind:cycle          }{txt}{bind: int     }{bind:{txt}%td       }{space 1}{bind:         }{bind:  }{res}{res}From May to October and from October to May each year{p_end}
+{p 0 48}{bind:minFALTAp      }{txt}{bind: int     }{bind:{txt}%d        }{space 1}{bind:         }{bind:  }{res}{res}{p_end}
+{p 0 48}{bind:minFALTAwm     }{txt}{bind: int     }{bind:{txt}%d        }{space 1}{bind:         }{bind:  }{res}{res}Labor experience-Starting working day{p_end}
+{p 0 48}{bind:cduration      }{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Contract duration{p_end}
+{p 0 48}{bind:ternure        }{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Labor experience in the same company{p_end}
+{p 0 48}{bind:before_curr    }{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}{p_end}
+{p 0 48}{bind:labor_experie~e}{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Labor life experience{p_end}
+{p 0 48}{bind:unemp_22cycles }{txt}{bind: byte    }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Unemployment period of the total 22 cycles{p_end}
+{p 0 48}{bind:indiv          }{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}tag(IDENTPERS){p_end}
+{p 0 48}{bind:age_oct16      }{txt}{bind: byte    }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Age of the individual at October 2016{p_end}
+{p 0 48}{bind:time_emp       }{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Number of temporary contracts in each cycle per individual{p_end}
+{p 0 48}{bind:time_emp2      }{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}{p_end}
+{p 0 48}{bind:ntemp_t        }{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Number of temporary contracts in each cycle per individual{p_end}
+{p 0 48}{bind:nindef_t       }{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Number of indefinite contracts in each cycle per individual{p_end}
+{p 0 48}{bind:age_cycle      }{txt}{bind: byte    }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Age of the individual at that cycle{p_end}
+{p 0 48}{bind:year           }{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Year{p_end}
+{p 0 48}{bind:merge          }{txt}{bind: byte    }{bind:{txt}%23.0g    }{space 1}{bind:_merge   }{bind:  }{res}{res}{p_end}
+{p 0 48}{bind:wage           }{txt}{bind: float   }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Proxy of wages for each cycle{p_end}
+{p 0 48}{bind:PROVPRIAF      }{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}Provincia de la primera afiliación{p_end}
+{p 0 48}{bind:DOMICILIO      }{txt}{bind: long    }{bind:{txt}%12.0g    }{space 1}{bind:         }{bind:  }{res}{res}Domicilio de residencia habitual (Padrón){p_end}
+{p 0 48}{bind:_merge         }{txt}{bind: byte    }{bind:{txt}%23.0g    }{space 1}{bind:_merge   }{bind:  }{res}{res}{p_end}
+{txt}{hline}
+Sorted by: 
+{res}     Note: Dataset has changed since last saved.
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. clear all
+{txt}
+{com}. set more off
+{txt}
+{com}. 
+. 
+. 
+. cd "C:\Users\pimpeter\Desktop\LABOR_2\DATA"
+{res}C:\Users\pimpeter\Desktop\LABOR_2\DATA
+{txt}
+{com}. use "data_2.dta",clear
+{txt}
+{com}. 
+. label var FALTA "Staring date of afiliation episode on the Social Security"
+{txt}
+{com}. label var FBAJA "Ending date of afiliation episode on the Social Security"
+{txt}
+{com}. 
+. *Compute total time as employed, self-employed and unemployed at each t 
+. *with using current_empdur current_selfempdur current_unempdur
+. 
+. label var wage "Proxy of wages for each cycle"
+{txt}
+{com}. label var year "Year"
+{txt}
+{com}. label var nindef_t "Number of indefinite contracts in each cycle per individual"
+{txt}
+{com}. label var ntemp_t "Number of temporary contracts in each cycle per individual"
+{txt}
+{com}. label var time_emp "Number of temporary contracts in each cycle per individual"
+{txt}
+{com}. 
+. save, replace
+{txt}file data_2.dta saved
+
+{com}. 
+. * I have 108564 individuals after I dropped out 6713 (so, we had 115,277)
+. 
+. drop if indiv==.
+{txt}(1,099,568 observations deleted)
+
+{com}. 
+. * Number of total observations
+. display 108564*22
+{res}2388408
+{txt}
+{com}. 
+. des
+
+{txt}Contains data from {res}data_2.dta
+{txt}  obs:{res}     2,388,408                          
+{txt} vars:{res}            45                          13 Apr 2020 02:59
+{txt} size:{res}   229,287,168                          
+{txt}{hline}
+              storage   display    value
+variable name   type    format     label      variable label
+{hline}
+{p 0 48}{res}{bind:IDENTPERS      }{txt}{bind: str15   }{bind:{txt}%15s      }{space 1}{bind:         }{bind:  }{res}{res}Identificador de la persona{p_end}
+{p 0 48}{bind:t              }{txt}{bind: byte    }{bind:{txt}%10.0g    }{space 1}{bind:         }{bind:  }{res}{res}{p_end}
+{p 0 48}{bind:FALTA          }{txt}{bind: int     }{bind:{txt}%td       }{space 1}{bind:         }{bind:  }{res}{res}Staring date of afiliation episode on the Social Security{p_end}
+{p 0 48}{bind:FBAJA          }{txt}{bind: int     }{bind:{txt}%td       }{space 1}{bind:         }{bind:  }{res}{res}Ending date of afiliation episode on the Social Security{p_end}
+{p 0 48}{bind:dbirth         }{txt}{bind: int     }{bind:{txt}%td       }{space 1}{bind:         }{bind:  }{res}{res}Date of birth{p_end}
+{p 0 48}{bind:provnac        }{txt}{bind: byte    }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Province of birth{p_end}
+{p 0 48}{bind:nacionalidad   }{txt}{bind: str3    }{bind:{txt}%9s       }{space 1}{bind:         }{bind:  }{res}{res}Nacionality{p_end}
+{p 0 48}{bind:gender         }{txt}{bind: byte    }{bind:{txt}%9.0g     }{space 1}{bind:gender   }{bind:  }{res}{res}Gender{p_end}
+{p 0 48}{bind:situlab        }{txt}{bind: byte    }{bind:{txt}%28.0g    }{space 1}{bind:situlab  }{bind:  }{res}{res}Labor status{p_end}
+{p 0 48}{bind:tipo           }{txt}{bind: byte    }{bind:{txt}%9.0g     }{space 1}{bind:tipo     }{bind:  }{res}{res}Type of contract{p_end}
+{p 0 48}{bind:grupcot        }{txt}{bind: byte    }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Quote group{p_end}
+{p 0 48}{bind:paisnac        }{txt}{bind: str3    }{bind:{txt}%9s       }{space 1}{bind:         }{bind:  }{res}{res}Country of birth{p_end}
+{p 0 48}{bind:minFALTA       }{txt}{bind: int     }{bind:{txt}%td       }{space 1}{bind:         }{bind:  }{res}{res}Labor experience-Starting working day{p_end}
+{p 0 48}{bind:current_empdur }{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Total time as employed until current contract{p_end}
+{p 0 48}{bind:current_self_~r}{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Total time as self-employed until current contract{p_end}
+{p 0 48}{bind:curr_unempdur  }{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Total time as unemployed until current contract{p_end}
+{p 0 48}{bind:ntemp          }{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Nº of temporary contract until current contract{p_end}
+{p 0 48}{bind:nindef         }{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Nº of indefinite contract until current contract{p_end}
+{p 0 48}{bind:hworked        }{txt}{bind: float   }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Hours worked{p_end}
+{p 0 48}{bind:CNAE09         }{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Economic activity according to CNAE 2009 of the listing account{p_end}
+{p 0 48}{bind:FTPT           }{txt}{bind: byte    }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Full or Part time contract{p_end}
+{p 0 48}{bind:ddeath         }{txt}{bind: int     }{bind:{txt}%td       }{space 1}{bind:         }{bind:  }{res}{res}Date of death{p_end}
+{p 0 48}{bind:education      }{txt}{bind: str2    }{bind:{txt}%9s       }{space 1}{bind:         }{bind:  }{res}{res}Years of education?{p_end}
+{p 0 48}{bind:start_age      }{txt}{bind: byte    }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Age at the beginning of the episode{p_end}
+{p 0 48}{bind:cycle          }{txt}{bind: int     }{bind:{txt}%td       }{space 1}{bind:         }{bind:  }{res}{res}From May to October and from October to May each year{p_end}
+{p 0 48}{bind:minFALTAp      }{txt}{bind: int     }{bind:{txt}%d        }{space 1}{bind:         }{bind:  }{res}{res}{p_end}
+{p 0 48}{bind:minFALTAwm     }{txt}{bind: int     }{bind:{txt}%d        }{space 1}{bind:         }{bind:  }{res}{res}Labor experience-Starting working day{p_end}
+{p 0 48}{bind:cduration      }{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Contract duration{p_end}
+{p 0 48}{bind:ternure        }{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Labor experience in the same company{p_end}
+{p 0 48}{bind:before_curr    }{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}{p_end}
+{p 0 48}{bind:labor_experie~e}{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Labor life experience{p_end}
+{p 0 48}{bind:unemp_22cycles }{txt}{bind: byte    }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Unemployment period of the total 22 cycles{p_end}
+{p 0 48}{bind:indiv          }{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}tag(IDENTPERS){p_end}
+{p 0 48}{bind:age_oct16      }{txt}{bind: byte    }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Age of the individual at October 2016{p_end}
+{p 0 48}{bind:time_emp       }{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Number of temporary contracts in each cycle per individual{p_end}
+{p 0 48}{bind:time_emp2      }{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}{p_end}
+{p 0 48}{bind:ntemp_t        }{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Number of temporary contracts in each cycle per individual{p_end}
+{p 0 48}{bind:nindef_t       }{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Number of indefinite contracts in each cycle per individual{p_end}
+{p 0 48}{bind:age_cycle      }{txt}{bind: byte    }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Age of the individual at that cycle{p_end}
+{p 0 48}{bind:year           }{txt}{bind: int     }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Year{p_end}
+{p 0 48}{bind:merge          }{txt}{bind: byte    }{bind:{txt}%23.0g    }{space 1}{bind:_merge   }{bind:  }{res}{res}{p_end}
+{p 0 48}{bind:wage           }{txt}{bind: float   }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}Proxy of wages for each cycle{p_end}
+{p 0 48}{bind:PROVPRIAF      }{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}Provincia de la primera afiliación{p_end}
+{p 0 48}{bind:DOMICILIO      }{txt}{bind: long    }{bind:{txt}%12.0g    }{space 1}{bind:         }{bind:  }{res}{res}Domicilio de residencia habitual (Padrón){p_end}
+{p 0 48}{bind:_merge         }{txt}{bind: byte    }{bind:{txt}%23.0g    }{space 1}{bind:_merge   }{bind:  }{res}{res}{p_end}
+{txt}{hline}
+Sorted by: 
+{res}     Note: Dataset has changed since last saved.
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. clear all
+{txt}
+{com}. set more off
+{txt}
+{com}. 
+. 
+. 
+. cd "C:\Users\pimpeter\Desktop\LABOR_2\DATA"
+{res}C:\Users\pimpeter\Desktop\LABOR_2\DATA
+{txt}
+{com}. use "data_2.dta",clear
+{txt}
+{com}. 
+. drop _merge
+{txt}
+{com}. sort IDENTPERS 
+{txt}
+{com}. merge IDENTPERS using "convivientes16.dta"
+{txt}{p}
+(note: you are using old
+{bf:merge} syntax; see
+{bf:{help merge:[D] merge}} for new syntax)
+{p_end}
+{p 0 4 2}
+variable{txt} IDENTPERS
+does not uniquely identify observations in
+the master data
+{p_end}
+
+{com}. 
+. tab _merge
+
+     {txt}_merge {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          1 {c |}{res}     63,188        1.81        1.81
+{txt}          3 {c |}{res}  3,424,788       98.19      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}  3,487,976      100.00
+{txt}
+{com}. 
+. *rename DOMICILIO residence
+. 
+. save, replace
+{txt}file data_2.dta saved
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. bysort IDENTPERS: gen hworked2=8 if hworked==8
+{txt}(2,448,641 missing values generated)
+
+{com}. bysort IDENTPERS: replace hworked2=8-hworked
+{txt}(1,334,554 real changes made)
+
+{com}. bysort IDENTPERS: replace hworked2=8 if hworked2==0
+{txt}(1,039,335 real changes made)
+
+{com}. drop hworked
+{txt}
+{com}. rename hworked2 hworked
+{res}{txt}
+{com}. 
+. save, replace
+{txt}file data_2.dta saved
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. gen y_end_panel=mdy(10,1,2016)
+{txt}
+{com}. format y_end_panel %td
+{txt}
+{com}. gen ageOct16=y_end_panel-dbirth
+{txt}(1,099,568 missing values generated)
+
+{com}. replace ageOct16=int(ageOct16/365)
+{txt}(2,388,408 real changes made)
+
+{com}. gen age_group=.
+{txt}(3,487,976 missing values generated)
+
+{com}. replace age_group=1 if ageOct16<30 
+{txt}(594,462 real changes made)
+
+{com}. replace age_group=2 if ageOct16>=30 & ageOct16<44 
+{txt}(1,666,698 real changes made)
+
+{com}. replace age_group=3 if ageOct16>=44
+{txt}(1,226,816 real changes made)
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. gen year2006=mdy(1,1,2006)
+{txt}
+{com}. format year2006 %td
+{txt}
+{com}. gen agejan06=year2006-dbirth
+{txt}(1,099,568 missing values generated)
+
+{com}. replace agejan06=int(agejan06/365)
+{txt}(2,388,408 real changes made)
+
+{com}. drop year2006
+{txt}
+{com}. histogram ageOct16 if indiv==1, ///
+> percent fcolor(mint) barwidth(1) gap(7) addlabel 
+{txt}(bin={res}50{txt}, start={res}16{txt}, width={res}.56{txt})
+{res}{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. gen inmigrant=1 if paisnac!="N00"
+{txt}(2,220,372 missing values generated)
+
+{com}. replace inmigrant=0 if paisnac=="N00"
+{txt}(2,220,372 real changes made)
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. gen nationality=.
+{txt}(3,487,976 missing values generated)
+
+{com}. replace nationality=1 if paisnac=="N01" | paisnac=="N10" | ///
+> paisnac=="N11" | paisnac=="N15" | paisnac=="N16" | paisnac=="N19"
+{txt}(16,478 real changes made)
+
+{com}. replace nationality=2 if paisnac=="N12" | paisnac=="N23" 
+{txt}(13,002 real changes made)
+
+{com}. replace nationality=3 if paisnac=="N06" | paisnac=="N03" | paisnac=="N07" | ///
+> paisnac=="N08" | paisnac=="N09" | paisnac=="N13" | paisnac=="N22" | ///
+> paisnac=="N26" | paisnac=="N27"
+{txt}(104,566 real changes made)
+
+{com}. replace nationality=4 if nationality==. & paisnac!="N00"
+{txt}(1,133,558 real changes made)
+
+{com}. replace nationality=5 if paisnac=="N00"
+{txt}(2,220,372 real changes made)
+
+{com}. 
+. tab nationality if indiv==1
+
+{txt}nationality {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          1 {c |}{res}        749        0.69        0.69
+{txt}          2 {c |}{res}        591        0.54        1.23
+{txt}          3 {c |}{res}      4,753        4.38        5.61
+{txt}          4 {c |}{res}      1,545        1.42        7.04
+{txt}          5 {c |}{res}    100,926       92.96      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}    108,564      100.00
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. ********************************************************************************
+. * EXERCISE 1:   
+. * B) 
+. * CREATING VARIABLES
+. 
+. 
+. * SITLAB: LABOR SITUATION
+. 
+. * TYPE OF CONTRACT: TIPO
+. 
+. * HOURS WORKED:
+. bysort t: egen avg_hworked=mean(hworked)
+{txt}(1099568 missing values generated)
+
+{com}. 
+. 
+. * MONTHLY WAGES:
+. bysort t: egen monthly_wages=mean(wage) 
+{txt}(1099568 missing values generated)
+
+{com}. bysort t: egen monthly_wages_eu12=mean(wage) if nationality==1
+{txt}(3471498 missing values generated)
+
+{com}. bysort t: egen monthly_wages_africa=mean(wage) if nationality==2
+{txt}(3474974 missing values generated)
+
+{com}. bysort t: egen monthly_wages_latinos=mean(wage) if nationality==3
+{txt}(3383410 missing values generated)
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. tab tipo nationality if t==1 & indiv==1,co
+{txt}
+{c TLC}{hline 19}{c TRC}
+{c |} Key{col 21}{c |}
+{c LT}{hline 19}{c RT}
+{c |}{space 5}{it:frequency}{col 21}{c |}
+{c |}{space 1}{it:column percentage}{col 21}{c |}
+{c BLC}{hline 19}{c BRC}
+
+   Type of {c |}                      nationality
+  contract {c |}         1          2          3          4          5 {c |}     Total
+{hline 11}{c +}{hline 55}{c +}{hline 10}
+  Indef FT {c |}{res}       241        150        739        360     27,647 {txt}{c |}{res}    29,137 
+           {txt}{c |}{res}     54.04      48.08      40.56      51.36      55.65 {txt}{c |}{res}     55.02 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+  Indef PT {c |}{res}        40         13        153         54      3,525 {txt}{c |}{res}     3,785 
+           {txt}{c |}{res}      8.97       4.17       8.40       7.70       7.10 {txt}{c |}{res}      7.15 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+   Temp FT {c |}{res}       114        129        501        215     13,543 {txt}{c |}{res}    14,502 
+           {txt}{c |}{res}     25.56      41.35      27.50      30.67      27.26 {txt}{c |}{res}     27.38 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+   Temp PT {c |}{res}        35         10        118         45      3,324 {txt}{c |}{res}     3,532 
+           {txt}{c |}{res}      7.85       3.21       6.48       6.42       6.69 {txt}{c |}{res}      6.67 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+   Unknown {c |}{res}        16         10        311         27      1,641 {txt}{c |}{res}     2,005 
+           {txt}{c |}{res}      3.59       3.21      17.07       3.85       3.30 {txt}{c |}{res}      3.79 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+     Total {c |}{res}       446        312      1,822        701     49,680 {txt}{c |}{res}    52,961 
+           {txt}{c |}{res}    100.00     100.00     100.00     100.00     100.00 {txt}{c |}{res}    100.00 
+
+{txt}
+{com}. tab tipo nationality if  t==22,co 
+{txt}
+{c TLC}{hline 19}{c TRC}
+{c |} Key{col 21}{c |}
+{c LT}{hline 19}{c RT}
+{c |}{space 5}{it:frequency}{col 21}{c |}
+{c |}{space 1}{it:column percentage}{col 21}{c |}
+{c BLC}{hline 19}{c BRC}
+
+   Type of {c |}                      nationality
+  contract {c |}         1          2          3          4          5 {c |}     Total
+{hline 11}{c +}{hline 55}{c +}{hline 10}
+  Indef FT {c |}{res}       306        177      1,423        481     36,922 {txt}{c |}{res}    39,309 
+           {txt}{c |}{res}     58.62      54.63      44.92      53.92      53.57 {txt}{c |}{res}     53.24 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+  Indef PT {c |}{res}        44         47        638        122      7,821 {txt}{c |}{res}     8,672 
+           {txt}{c |}{res}      8.43      14.51      20.14      13.68      11.35 {txt}{c |}{res}     11.75 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+   Temp FT {c |}{res}        99         62        621        172     14,120 {txt}{c |}{res}    15,074 
+           {txt}{c |}{res}     18.97      19.14      19.60      19.28      20.49 {txt}{c |}{res}     20.42 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+   Temp PT {c |}{res}        48         35        455         85      6,628 {txt}{c |}{res}     7,251 
+           {txt}{c |}{res}      9.20      10.80      14.36       9.53       9.62 {txt}{c |}{res}      9.82 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+   Unknown {c |}{res}        25          3         31         32      3,435 {txt}{c |}{res}     3,526 
+           {txt}{c |}{res}      4.79       0.93       0.98       3.59       4.98 {txt}{c |}{res}      4.78 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+     Total {c |}{res}       522        324      3,168        892     68,926 {txt}{c |}{res}    73,832 
+           {txt}{c |}{res}    100.00     100.00     100.00     100.00     100.00 {txt}{c |}{res}    100.00 
+
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. tab tipo nationality if t==1 & indiv==1,co
+{txt}
+{c TLC}{hline 19}{c TRC}
+{c |} Key{col 21}{c |}
+{c LT}{hline 19}{c RT}
+{c |}{space 5}{it:frequency}{col 21}{c |}
+{c |}{space 1}{it:column percentage}{col 21}{c |}
+{c BLC}{hline 19}{c BRC}
+
+   Type of {c |}                      nationality
+  contract {c |}         1          2          3          4          5 {c |}     Total
+{hline 11}{c +}{hline 55}{c +}{hline 10}
+  Indef FT {c |}{res}       241        150        739        360     27,647 {txt}{c |}{res}    29,137 
+           {txt}{c |}{res}     54.04      48.08      40.56      51.36      55.65 {txt}{c |}{res}     55.02 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+  Indef PT {c |}{res}        40         13        153         54      3,525 {txt}{c |}{res}     3,785 
+           {txt}{c |}{res}      8.97       4.17       8.40       7.70       7.10 {txt}{c |}{res}      7.15 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+   Temp FT {c |}{res}       114        129        501        215     13,543 {txt}{c |}{res}    14,502 
+           {txt}{c |}{res}     25.56      41.35      27.50      30.67      27.26 {txt}{c |}{res}     27.38 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+   Temp PT {c |}{res}        35         10        118         45      3,324 {txt}{c |}{res}     3,532 
+           {txt}{c |}{res}      7.85       3.21       6.48       6.42       6.69 {txt}{c |}{res}      6.67 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+   Unknown {c |}{res}        16         10        311         27      1,641 {txt}{c |}{res}     2,005 
+           {txt}{c |}{res}      3.59       3.21      17.07       3.85       3.30 {txt}{c |}{res}      3.79 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+     Total {c |}{res}       446        312      1,822        701     49,680 {txt}{c |}{res}    52,961 
+           {txt}{c |}{res}    100.00     100.00     100.00     100.00     100.00 {txt}{c |}{res}    100.00 
+
+{txt}
+{com}. tab tipo nationality if  t==22,co 
+{txt}
+{c TLC}{hline 19}{c TRC}
+{c |} Key{col 21}{c |}
+{c LT}{hline 19}{c RT}
+{c |}{space 5}{it:frequency}{col 21}{c |}
+{c |}{space 1}{it:column percentage}{col 21}{c |}
+{c BLC}{hline 19}{c BRC}
+
+   Type of {c |}                      nationality
+  contract {c |}         1          2          3          4          5 {c |}     Total
+{hline 11}{c +}{hline 55}{c +}{hline 10}
+  Indef FT {c |}{res}       306        177      1,423        481     36,922 {txt}{c |}{res}    39,309 
+           {txt}{c |}{res}     58.62      54.63      44.92      53.92      53.57 {txt}{c |}{res}     53.24 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+  Indef PT {c |}{res}        44         47        638        122      7,821 {txt}{c |}{res}     8,672 
+           {txt}{c |}{res}      8.43      14.51      20.14      13.68      11.35 {txt}{c |}{res}     11.75 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+   Temp FT {c |}{res}        99         62        621        172     14,120 {txt}{c |}{res}    15,074 
+           {txt}{c |}{res}     18.97      19.14      19.60      19.28      20.49 {txt}{c |}{res}     20.42 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+   Temp PT {c |}{res}        48         35        455         85      6,628 {txt}{c |}{res}     7,251 
+           {txt}{c |}{res}      9.20      10.80      14.36       9.53       9.62 {txt}{c |}{res}      9.82 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+   Unknown {c |}{res}        25          3         31         32      3,435 {txt}{c |}{res}     3,526 
+           {txt}{c |}{res}      4.79       0.93       0.98       3.59       4.98 {txt}{c |}{res}      4.78 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+     Total {c |}{res}       522        324      3,168        892     68,926 {txt}{c |}{res}    73,832 
+           {txt}{c |}{res}    100.00     100.00     100.00     100.00     100.00 {txt}{c |}{res}    100.00 
+
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. tab nationality if t==1, sum (hworked)
+
+            {txt}{c |}         Summary of hworked
+nationality {c |}        Mean   Std. Dev.       Freq.
+{hline 12}{c +}{hline 36}
+          1 {c |}  {res} 7.4079641   1.4291859         446
+  {txt}        2 {c |}  {res} 7.6978974   1.1668299         312
+  {txt}        3 {c |}  {res} 7.4535368   1.4193309       1,822
+  {txt}        4 {c |}  {res} 7.4653238   1.3995986         701
+  {txt}        5 {c |}  {res} 7.4352229   1.4956772      49,680
+{txt}{hline 12}{c +}{hline 36}
+      Total {c |}  {res} 7.4375692   1.4897004      52,961
+{txt}
+{com}. tab nationality if t==22, sum (hworked)
+
+            {txt}{c |}         Summary of hworked
+nationality {c |}        Mean   Std. Dev.       Freq.
+{hline 12}{c +}{hline 36}
+          1 {c |}  {res} 7.2349885   1.6233286         522
+  {txt}        2 {c |}  {res} 7.0231605   1.8924414         324
+  {txt}        3 {c |}  {res} 6.8486313   1.9834179       3,168
+  {txt}        4 {c |}  {res} 7.1184395   1.8001005         892
+  {txt}        5 {c |}  {res} 7.1171101    1.748809      68,926
+{txt}{hline 12}{c +}{hline 36}
+      Total {c |}  {res} 7.1060273   1.7607762      73,832
+{txt}
+{com}. 
+. 
+. 
+. * MONTHLY WAGES
+. 
+. sum monthly_wages_eu12 monthly_wages_africa monthly_wages_latinos ///
+>     monthly_wages_others monthly_wages_spain if t==1
+{err}variable {bf}monthly_wages_others{sf} not found
+{txt}{search r(111), local:r(111);}
+
+end of do-file
+
+{search r(111), local:r(111);}
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. sum hourly_wages_eu12 hourly_wages_africa hourly_wages_latinos ///
+>     hourly_wages_others hourly_wages_spain if t==1
+{err}variable {bf}hourly_wages_eu12{sf} not found
+{txt}{search r(111), local:r(111);}
+
+end of do-file
+
+{search r(111), local:r(111);}
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. bysort t: egen monthly_wages_spain=mean(wage) if nationality==5
+{txt}(1267604 missing values generated)
+
+{com}. * HOURLY WAGES:
+. 
+. bysort IDENTPERS: gen wage_day=(wage/22) if situlab==1
+{txt}(2,162,778 missing values generated)
+
+{com}. bysort IDENTPERS: gen hourly_wage=(wage_day/hworked) if situlab==1
+{txt}(2,162,778 missing values generated)
+
+{com}. drop wage_day 
+{txt}
+{com}. bysort t: egen hourly_wages_eu12=mean(hourly_wage) if nationality==1
+{txt}(3471498 missing values generated)
+
+{com}. bysort t: egen hourly_wages_africa=mean(hourly_wage) if nationality==2
+{txt}(3474974 missing values generated)
+
+{com}. bysort t: egen hourly_wages_latinos=mean(hourly_wage) if nationality==3
+{txt}(3383410 missing values generated)
+
+{com}. bysort t: egen hourly_wages_others=mean(hourly_wage) if nationality==4
+{txt}(3453986 missing values generated)
+
+{com}. bysort t: egen hourly_wages_spain=mean(hourly_wage) if nationality==5
+{txt}(1267604 missing values generated)
+
+{com}. 
+. *----------
+. 
+. * LABOR SITUATION BY NATIONALITY
+. 
+. tab situlab nationality if t==1 & indiv==1,co
+{txt}
+{c TLC}{hline 19}{c TRC}
+{c |} Key{col 21}{c |}
+{c LT}{hline 19}{c RT}
+{c |}{space 5}{it:frequency}{col 21}{c |}
+{c |}{space 1}{it:column percentage}{col 21}{c |}
+{c BLC}{hline 19}{c BRC}
+
+                      {c |}                      nationality
+         Labor status {c |}         1          2          3          4          5 {c |}     Total
+{hline 22}{c +}{hline 55}{c +}{hline 10}
+             Employed {c |}{res}       446        312      1,822        701     49,680 {txt}{c |}{res}    52,961 
+                      {txt}{c |}{res}     59.55      52.79      38.33      45.37      49.22 {txt}{c |}{res}     48.78 
+{txt}{hline 22}{c +}{hline 55}{c +}{hline 10}
+        Self-employed {c |}{res}        64         27         87         78      6,185 {txt}{c |}{res}     6,441 
+                      {txt}{c |}{res}      8.54       4.57       1.83       5.05       6.13 {txt}{c |}{res}      5.93 
+{txt}{hline 22}{c +}{hline 55}{c +}{hline 10}
+           Unemployed {c |}{res}       239        252      2,844        764     45,040 {txt}{c |}{res}    49,139 
+                      {txt}{c |}{res}     31.91      42.64      59.84      49.45      44.63 {txt}{c |}{res}     45.26 
+{txt}{hline 22}{c +}{hline 55}{c +}{hline 10}
+Special agreement and {c |}{res}         0          0          0          2         21 {txt}{c |}{res}        23 
+                      {txt}{c |}{res}      0.00       0.00       0.00       0.13       0.02 {txt}{c |}{res}      0.02 
+{txt}{hline 22}{c +}{hline 55}{c +}{hline 10}
+                Total {c |}{res}       749        591      4,753      1,545    100,926 {txt}{c |}{res}   108,564 
+                      {txt}{c |}{res}    100.00     100.00     100.00     100.00     100.00 {txt}{c |}{res}    100.00 
+
+{txt}
+{com}. tab situlab nationality if t==22,co
+{txt}
+{c TLC}{hline 19}{c TRC}
+{c |} Key{col 21}{c |}
+{c LT}{hline 19}{c RT}
+{c |}{space 5}{it:frequency}{col 21}{c |}
+{c |}{space 1}{it:column percentage}{col 21}{c |}
+{c BLC}{hline 19}{c BRC}
+
+                      {c |}                      nationality
+         Labor status {c |}         1          2          3          4          5 {c |}     Total
+{hline 22}{c +}{hline 55}{c +}{hline 10}
+             Employed {c |}{res}       522        324      3,168        892     68,926 {txt}{c |}{res}    73,832 
+                      {txt}{c |}{res}     69.69      54.82      66.65      57.73      68.29 {txt}{c |}{res}     68.01 
+{txt}{hline 22}{c +}{hline 55}{c +}{hline 10}
+        Self-employed {c |}{res}        81         55        370        172     11,769 {txt}{c |}{res}    12,447 
+                      {txt}{c |}{res}     10.81       9.31       7.78      11.13      11.66 {txt}{c |}{res}     11.47 
+{txt}{hline 22}{c +}{hline 55}{c +}{hline 10}
+           Unemployed {c |}{res}       135        194      1,153        461     18,834 {txt}{c |}{res}    20,777 
+                      {txt}{c |}{res}     18.02      32.83      24.26      29.84      18.66 {txt}{c |}{res}     19.14 
+{txt}{hline 22}{c +}{hline 55}{c +}{hline 10}
+Special agreement and {c |}{res}        11         18         62         20      1,397 {txt}{c |}{res}     1,508 
+                      {txt}{c |}{res}      1.47       3.05       1.30       1.29       1.38 {txt}{c |}{res}      1.39 
+{txt}{hline 22}{c +}{hline 55}{c +}{hline 10}
+                Total {c |}{res}       749        591      4,753      1,545    100,926 {txt}{c |}{res}   108,564 
+                      {txt}{c |}{res}    100.00     100.00     100.00     100.00     100.00 {txt}{c |}{res}    100.00 
+
+{txt}
+{com}. 
+. tab situlab age_group if t==1
+
+                      {txt}{c |}            age_group
+         Labor status {c |}         1          2          3 {c |}     Total
+{hline 22}{c +}{hline 33}{c +}{hline 10}
+             Employed {c |}{res}     1,924     46,977      4,060 {txt}{c |}{res}    52,961 
+{txt}        Self-employed {c |}{res}        53      5,661        727 {txt}{c |}{res}     6,441 
+{txt}           Unemployed {c |}{res}    25,044     23,099        996 {txt}{c |}{res}    49,139 
+{txt}Special agreement and {c |}{res}         0         22          1 {txt}{c |}{res}        23 
+{txt}{hline 22}{c +}{hline 33}{c +}{hline 10}
+                Total {c |}{res}    27,021     75,759      5,784 {txt}{c |}{res}   108,564 
+
+{txt}
+{com}. 
+. label define natgroups 1 "EU12" 2"Africa" 3"South America" 4"Others" 5 "Spain", replace
+{txt}
+{com}. label values nationality natgroups
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. tab tipo nationality if t==1 & indiv==1,co
+{txt}
+{c TLC}{hline 19}{c TRC}
+{c |} Key{col 21}{c |}
+{c LT}{hline 19}{c RT}
+{c |}{space 5}{it:frequency}{col 21}{c |}
+{c |}{space 1}{it:column percentage}{col 21}{c |}
+{c BLC}{hline 19}{c BRC}
+
+   Type of {c |}                      nationality
+  contract {c |}      EU12     Africa  South Ame     Others      Spain {c |}     Total
+{hline 11}{c +}{hline 55}{c +}{hline 10}
+  Indef FT {c |}{res}       241        150        739        360     27,647 {txt}{c |}{res}    29,137 
+           {txt}{c |}{res}     54.04      48.08      40.56      51.36      55.65 {txt}{c |}{res}     55.02 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+  Indef PT {c |}{res}        40         13        153         54      3,525 {txt}{c |}{res}     3,785 
+           {txt}{c |}{res}      8.97       4.17       8.40       7.70       7.10 {txt}{c |}{res}      7.15 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+   Temp FT {c |}{res}       114        129        501        215     13,543 {txt}{c |}{res}    14,502 
+           {txt}{c |}{res}     25.56      41.35      27.50      30.67      27.26 {txt}{c |}{res}     27.38 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+   Temp PT {c |}{res}        35         10        118         45      3,324 {txt}{c |}{res}     3,532 
+           {txt}{c |}{res}      7.85       3.21       6.48       6.42       6.69 {txt}{c |}{res}      6.67 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+   Unknown {c |}{res}        16         10        311         27      1,641 {txt}{c |}{res}     2,005 
+           {txt}{c |}{res}      3.59       3.21      17.07       3.85       3.30 {txt}{c |}{res}      3.79 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+     Total {c |}{res}       446        312      1,822        701     49,680 {txt}{c |}{res}    52,961 
+           {txt}{c |}{res}    100.00     100.00     100.00     100.00     100.00 {txt}{c |}{res}    100.00 
+
+{txt}
+{com}. tab tipo nationality if  t==22,co 
+{txt}
+{c TLC}{hline 19}{c TRC}
+{c |} Key{col 21}{c |}
+{c LT}{hline 19}{c RT}
+{c |}{space 5}{it:frequency}{col 21}{c |}
+{c |}{space 1}{it:column percentage}{col 21}{c |}
+{c BLC}{hline 19}{c BRC}
+
+   Type of {c |}                      nationality
+  contract {c |}      EU12     Africa  South Ame     Others      Spain {c |}     Total
+{hline 11}{c +}{hline 55}{c +}{hline 10}
+  Indef FT {c |}{res}       306        177      1,423        481     36,922 {txt}{c |}{res}    39,309 
+           {txt}{c |}{res}     58.62      54.63      44.92      53.92      53.57 {txt}{c |}{res}     53.24 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+  Indef PT {c |}{res}        44         47        638        122      7,821 {txt}{c |}{res}     8,672 
+           {txt}{c |}{res}      8.43      14.51      20.14      13.68      11.35 {txt}{c |}{res}     11.75 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+   Temp FT {c |}{res}        99         62        621        172     14,120 {txt}{c |}{res}    15,074 
+           {txt}{c |}{res}     18.97      19.14      19.60      19.28      20.49 {txt}{c |}{res}     20.42 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+   Temp PT {c |}{res}        48         35        455         85      6,628 {txt}{c |}{res}     7,251 
+           {txt}{c |}{res}      9.20      10.80      14.36       9.53       9.62 {txt}{c |}{res}      9.82 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+   Unknown {c |}{res}        25          3         31         32      3,435 {txt}{c |}{res}     3,526 
+           {txt}{c |}{res}      4.79       0.93       0.98       3.59       4.98 {txt}{c |}{res}      4.78 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+     Total {c |}{res}       522        324      3,168        892     68,926 {txt}{c |}{res}    73,832 
+           {txt}{c |}{res}    100.00     100.00     100.00     100.00     100.00 {txt}{c |}{res}    100.00 
+
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. tab nationality if t==1, sum (hworked)
+
+            {txt}{c |}         Summary of hworked
+nationality {c |}        Mean   Std. Dev.       Freq.
+{hline 12}{c +}{hline 36}
+       EU12 {c |}  {res} 7.4079641   1.4291859         446
+  {txt}   Africa {c |}  {res} 7.6978974   1.1668299         312
+  {txt}South Ame {c |}  {res} 7.4535368   1.4193309       1,822
+  {txt}   Others {c |}  {res} 7.4653238   1.3995986         701
+  {txt}    Spain {c |}  {res} 7.4352229   1.4956772      49,680
+{txt}{hline 12}{c +}{hline 36}
+      Total {c |}  {res} 7.4375692   1.4897004      52,961
+{txt}
+{com}. tab nationality if t==22, sum (hworked)
+
+            {txt}{c |}         Summary of hworked
+nationality {c |}        Mean   Std. Dev.       Freq.
+{hline 12}{c +}{hline 36}
+       EU12 {c |}  {res} 7.2349885   1.6233286         522
+  {txt}   Africa {c |}  {res} 7.0231605   1.8924414         324
+  {txt}South Ame {c |}  {res} 6.8486313   1.9834179       3,168
+  {txt}   Others {c |}  {res} 7.1184395   1.8001005         892
+  {txt}    Spain {c |}  {res} 7.1171101    1.748809      68,926
+{txt}{hline 12}{c +}{hline 36}
+      Total {c |}  {res} 7.1060273   1.7607762      73,832
+{txt}
+{com}. 
+. 
+. 
+. * MONTHLY WAGES
+. 
+. sum monthly_wages_eu12 monthly_wages_africa monthly_wages_latinos ///
+>     monthly_wages_others monthly_wages_spain if t==1
+{err}variable {bf}monthly_wages_others{sf} not found
+{txt}{search r(111), local:r(111);}
+
+end of do-file
+
+{search r(111), local:r(111);}
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}.         
+. * HOURLY WAGES
+. sum hourly_wages_eu12 hourly_wages_africa hourly_wages_latinos ///
+>     hourly_wages_others hourly_wages_spain if t==1
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+hourly_wa~12 {c |}{res}        749     8.13084           0    8.13084    8.13084
+{txt}hourly_wag~a {c |}{res}        591    7.036799           0   7.036799   7.036799
+{txt}hourly_wa~os {c |}{res}      4,753    10.44046           0   10.44046   10.44046
+{txt}hourly_wa~rs {c |}{res}      1,545    8.236124           0   8.236124   8.236124
+{txt}hourly_wag~n {c |}{res}    100,926    9.309595           0   9.309595   9.309595
+{txt}
+{com}. 
+. sum hourly_wages_eu12 hourly_wages_africa hourly_wages_latinos ///
+>     hourly_wages_others hourly_wages_spain if t==22
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+hourly_wa~12 {c |}{res}        749    12.09313           0   12.09313   12.09313
+{txt}hourly_wag~a {c |}{res}        591    9.248952           0   9.248952   9.248952
+{txt}hourly_wa~os {c |}{res}      4,753    9.583117           0   9.583117   9.583117
+{txt}hourly_wa~rs {c |}{res}      1,545    11.60483           0   11.60483   11.60483
+{txt}hourly_wag~n {c |}{res}    100,926    12.47974           0   12.47974   12.47974
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. gen inmigrants=.
+{txt}(3,487,976 missing values generated)
+
+{com}. replace inmigrants=1 if paisnac!="N00"
+{txt}(1,267,604 real changes made)
+
+{com}. replace inmigrants=0 if paisnac=="N00"
+{txt}(2,220,372 real changes made)
+
+{com}. 
+. bysort t: egen hourly_wages_inmigrant=mean(hourly_wage) if inmigrants==1
+{txt}(3319940 missing values generated)
+
+{com}. bysort t: egen hourly_wages_spanish=mean(hourly_wage) if inmigrants==0
+{txt}(1267604 missing values generated)
+
+{com}. 
+. bysort t: egen monthly_wages_inmigrant=mean(monthly_wages) if inmigrants==1
+{txt}(3319940 missing values generated)
+
+{com}. bysort t: egen monthly_wages_spanish=mean(monthly_wages) if inmigrants==0
+{txt}(1267604 missing values generated)
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. bysort t: egen hworked_inmigrant=mean(hworked) if inmigrants==1
+{txt}(3319940 missing values generated)
+
+{com}. bysort t: egen hworked_spanish=mean(hworked) if inmigrants==0
+{txt}(1267604 missing values generated)
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. tab situlab if inmigrants==1
+
+                {txt}Labor status {c |}      Freq.     Percent        Cum.
+{hline 29}{c +}{hline 35}
+                    Employed {c |}{res}     87,918       52.32       52.32
+{txt}               Self-employed {c |}{res}      9,515        5.66       57.98
+{txt}                  Unemployed {c |}{res}     69,436       41.32       99.31
+{txt}Special agreement and others {c |}{res}      1,167        0.69      100.00
+{txt}{hline 29}{c +}{hline 35}
+                       Total {c |}{res}    168,036      100.00
+{txt}
+{com}. tab situlab if inmigrants==0
+
+                {txt}Labor status {c |}      Freq.     Percent        Cum.
+{hline 29}{c +}{hline 35}
+                    Employed {c |}{res}  1,246,636       56.15       56.15
+{txt}               Self-employed {c |}{res}    188,999        8.51       64.66
+{txt}                  Unemployed {c |}{res}    770,045       34.68       99.34
+{txt}Special agreement and others {c |}{res}     14,692        0.66      100.00
+{txt}{hline 29}{c +}{hline 35}
+                       Total {c |}{res}  2,220,372      100.00
+{txt}
+{com}. 
+. * 4 TYPES OF INMIGRANTS
+. * monthly graph
+. bysort t: egen hworked_eu=mean(hworked) if nationality==1
+{txt}(3471498 missing values generated)
+
+{com}. bysort t: egen hworked_africa=mean(hworked) if nationality==2
+{txt}(3474974 missing values generated)
+
+{com}. bysort t: egen hworked_latinos=mean(hworked) if nationality==3
+{txt}(3383410 missing values generated)
+
+{com}. bysort t: egen hworked_others=mean(hworked) if nationality==4
+{txt}(3453986 missing values generated)
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. tabstat hourly_wage, statistics(mean median sd p25 p50 p75)
+
+{txt}{ralign 12:variable} {...}
+{c |}      mean       p50        sd       p25       p50       p75
+{hline 13}{c +}{hline 60}
+{ralign 12:hourly_wage} {...}
+{c |}{...}
+ {res} 11.65185  8.660739  109.3997  6.630739  8.660739  12.55415
+{txt}{hline 13}{c BT}{hline 60}
+
+{com}. 
+. * Creating LN wage
+. bysort IDENTPERS: gen ln_h_wage=log(hourly_wage)
+{txt}(2,172,317 missing values generated)
+
+{com}. bysort IDENTPERS: gen ln_hourly_wage_rate =ln_h_wage[_n]-ln_h_wage[_n-1] 
+{txt}(2,528,273 missing values generated)
+
+{com}. bysort IDENTPERS: gen hourly_wage_change =hourly_wage[_n]-hourly_wage[_n-1] 
+{txt}(2,521,068 missing values generated)
+
+{com}. bysort IDENTPERS: gen l_hourly_wage_change =log(hourly_wage_change)
+{txt}(3,028,057 missing values generated)
+
+{com}. 
+. replace l_hourly_wage_change=. if l_hourly_wage_change<0
+{txt}(195,594 real changes made, 195,594 to missing)
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. gen exp_cat =.
+{txt}(3,487,976 missing values generated)
+
+{com}. replace exp_cat = 1 if labor_experience <= 182
+{txt}(97,274 real changes made)
+
+{com}. replace exp_cat = 2 if labor_experience > 182 & labor_experience <= 365
+{txt}(87,737 real changes made)
+
+{com}. replace exp_cat = 3 if labor_experience > 365 & labor_experience <= 730
+{txt}(158,995 real changes made)
+
+{com}. replace exp_cat = 4 if labor_experience > 730 & labor_experience <= 1095
+{txt}(148,853 real changes made)
+
+{com}. replace exp_cat = 5 if labor_experience > 1095 & labor_experience <= 1040
+{txt}(0 real changes made)
+
+{com}. replace exp_cat = 6 if labor_experience > 1040
+{txt}(3,017,340 real changes made)
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "C:\Users\pimpeter\AppData\Local\Temp\STD04000000.tmp"
+{txt}
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\pimpeter\Desktop\LABOR_2\DATA\log.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}13 Apr 2020, 03:06:11
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

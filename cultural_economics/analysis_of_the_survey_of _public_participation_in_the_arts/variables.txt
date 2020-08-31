@@ -1,0 +1,125 @@
+HRHHID household identifier
+HEFAMINC family income (16 categories + -1=blank)
+GTCBSAST type of city:
+	1=principal
+	2=balance
+	3=nonmetropolitan
+	4=not identified
+GCTCS Consolidated Statistical Area code ¿?
+PRTAGE person's age (-1=blank)
+PEMARITL marital status
+	1=married, spouse present
+	2=married, spouse absent
+	3=widowed
+	4=divorced
+	5=separated
+	6=never married
+	-1=blank
+PESEX sex
+	1=male
+	2=female
+	-1=blank
+
+PTDTRACE raza
+1 White Only 100565 68.1 %
+2 Black Only 13531 9.2 %
+3 American Indian, Alaskan Native Only 1775 1.2 %
+4 Asian Only 6539 4.4 %
+5 Hawaiian/Pacific Islander Only 598 0.4 %
+6 White-Black 824 0.6 %
+7 White-AI 866 0.6 %
+8 White-Asian 519 0.4 %
+9 White-HP 113 0.1 %
+10 Black-AI 131 0.1 %
+11 Black-Asian 35 0.0 %
+12 Black-HP 11 0.0 %
+13 AI-Asian 7 0.0 %
+14 AI-HP 3 0.0 %
+15 Asian-HP 58 0.0 %
+16 W-B-AI 112 0.1 %
+17 W-B-A 33 0.0 %
+18 W-B-HP 8 0.0 %
+19 W-AI-A 7 0.0 %
+20 W-AI-HP 1 0.0 %
+21 W-A-HP 72 0.0 %
+22 B-AI-A 1 0.0 %
+23 W-B-AI-A 1 0.0 %
+24 W-AI-A-HP 2 0.0 %
+25 Other 3 Race Combinations 9 0.0 %
+26 Other 4 and 5 Race Combinations 10
+-1 blank
+
+PRFAMTYP family type recode (no sé qué es esto)
+
+PENATVTY country of birth
+57 United States 110378 74.8 %
+60 American Samoa 5 0.0 %
+66 Guam 32 0.0 %
+69 Northern Marianas 2 0.0 %
+73 Puerto Rico 456 0.3 %
+78 U.S. Virgin Islands 8 0.0 %
+96 Other U.S. Island Area 0 0.0 %
+100 Albania 31 0.0 %
+102 Austria 17 0.0 %
+103 Belgium 25 0.0 %
+104 Bulgaria 26 0.0 %
+105 Czechoslovakia 11 0.0 %
+106 Denmark 15 0.0 %
+108 Finland 11 0.0 %
+109 France 66 0.0 %
+110 Germany 389 0.3 %
+116 Greece 40 0.0 %
+117 Hungary 17 0.0 %
+118 Undocumented Code 3 0.0 %
+119 Ireland 59 0.0 %
+120 Italy 171 0.1 %
+126 Netherlands 28 0.0 %
+127 Norway 4 0.0 %
+128 Poland 120 0.1 %
+129 Portugal 53 0.0 %
+130 Azores 12 0.0 %
+132 Romania 54 0.0 %
+134 Spain 59 0.0 %
+136 Sweden 12 0.0 %
+137 Switzerland 12 0.0 %
+138 United Kingdom 88 0.1 %
+139 England 158 0.1 %
+140 Scotland 29 0.0 %
+142 Northern Ireland 1 0.0 %
+147 Yugoslavia 14 0.0 %
+148 Czech Republic 3 0.0 %
+149 Slovakia 2 0.0 %
+150 Bosnia & Herzegovina 34 0.0 %
+151 Croatia 4 0.0 %
+152 Macedonia 9 0.0 %
+154 Serbia 6 0.0 %
+155 Estonia 1 0.0 %
+156 Latvia 7 0.0 %
+157 Lithuania 11 0.0 %
+158 Armenia 18 0.0 %
+159 Azerbaijan 10 0.0 %
+160 Belarus 13 0.0 %
+161 Georgia 9 0.0 %
+162 Moldova 23 0.0 %
+163 Russia 119 0.1 %
+
+PEMLR monthly labour force recode
+PRHRUSL usual hours worked weekly
+PRDTCOW1 detailed class of worker recode
+PRDTIND1 detailed industry recode
+PRDTOCC1 detailed occupation recode
+PRMJIND1 major industry recode
+PRMJOCGR major occupation categories
+PWSSWGT final weight
+PRNMCHLD number of own children <18 yo
+PTC1Q14B number of books read during the last 12 months
+PEMEQ1A in lifetime, have taken lessons/classes in music
+PEMEQ1B lessons in photography / filmmaking
+PEMEQ1C lessons in visual arts
+PEMEQ1D lessons in acting / theatre
+PEMEQ1E lessons in dance
+PEMEQ1F lessons in creative writing
+PEMEQ1G lessons in art history or art / music appreciation
+PEMEQ8 highest degree or level of school father completed
+PEMEQ9 mother education
+PEEDUCA person's education

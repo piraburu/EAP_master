@@ -1,0 +1,27 @@
+\begin{table}[htbp]\centering
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\caption{Regressing Worked Hours by Age groups}
+\begin{tabular}{l*{1}{c}}
+\hline\hline
+                    &\multicolumn{1}{c}{(1)}\\
+                    &\multicolumn{1}{c}{Hours worked}\\
+\hline
+age\_group=1         &           0         \\
+                    &         (.)         \\
+[1em]
+age\_group=2         &       0.413\sym{***}\\
+                    &     (76.22)         \\
+[1em]
+age\_group=3         &       0.508\sym{***}\\
+                    &     (58.00)         \\
+[1em]
+Constant            &       6.627\sym{***}\\
+                    &   (1317.22)         \\
+\hline
+Observations        &     1334554         \\
+Adjusted \(R^{2}\)  &       0.005         \\
+\hline\hline
+\multicolumn{2}{l}{\footnotesize \textit{t} statistics in parentheses}\\
+\multicolumn{2}{l}{\footnotesize \sym{*} \(p<0.05\), \sym{**} \(p<0.01\), \sym{***} \(p<0.001\)}\\
+\end{tabular}
+\end{table}
